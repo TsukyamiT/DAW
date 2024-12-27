@@ -5,6 +5,7 @@ import "../css/main.css";
 // React imports.
 import React from "react";
 import ReactDOM from "react-dom";
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 // App imports.
 import BaseLayout from "./components/BaseLayout";
@@ -12,8 +13,14 @@ import BaseLayout from "./components/BaseLayout";
 // import * as Contacts from "./Contacts";
 
 
-// Render the UI.
-const baseComponent = ReactDOM.render(<BaseLayout />, document.body);
+const baseComponent = ReactDOM.render(
+	<Router>
+		<Routes>
+			<Route path="/home" element={<BaseLayout />} />
+		</Routes>
+	</Router>,
+	document.body
+);
 
 
 // Now go fetch the user's mailboxes, and then their contacts.

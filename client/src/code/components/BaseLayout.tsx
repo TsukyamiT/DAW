@@ -1,5 +1,6 @@
 // React imports.
-import React, { Component } from "react";
+import React, { Component, useState, useEffect } from "react";
+import axios, { AxiosResponse } from "axios";
 
 // Library imports.
 import Dialog from "@mui/material/Dialog";
@@ -8,16 +9,8 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
 // App imports.
-// import Toolbar from "./Toolbar";
-// import MailboxList from "./MailboxList";
-// import MessageList from "./MessageList";
-// import ContactList from "./ContactList";
-// import WelcomeView from "./WelcomeView";
-// import ContactView from "./ContactView";
-// import MessageView from "./MessageView";
 import { createState } from "../state";
 import Topbar from "./Topbar";
-
 
 /**
  * BaseLayout.
@@ -30,11 +23,30 @@ class BaseLayout extends Component {
 	 */
 	state = createState(this);
 
+	private data = "";
+
+	private async fetchData() {
+		try {
+			const response = await axios.get("http://127.0.0.1:8080/api/data");
+			console.log(response.data);
+			this.data = response.data;
+		} catch (err) {
+			console.log(err.message);
+		}
+	}
+
+	componentDidMount() {
+		this.fetchData().then(() => {
+			this.setState({})
+			console.log("fetched");
+		});
+	}
 
 	/**
 	 * Render().
 	 */
 	render() {
+		console.log("rendering");
 		return ((
 			<div className="appContainer">
 				<Dialog
@@ -47,6 +59,9 @@ class BaseLayout extends Component {
 				<div className="topbar">
 					<Topbar state={ this.state } />
 				</div>
+				<h1>
+					Hello, {this.data}.
+				</h1>
 			</div>
 		));
 	}

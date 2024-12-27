@@ -9,8 +9,8 @@
     "build:prod": "webpack --mode=production --node-env=production",
     "watch": "webpack --watch",
     "serve": "webpack serve",
-	"compile:old": "webpack --mode=production --node-env=production && npx babel src/code/main.tsx --out-file dist/main.js",
-	"compile": "webpack --mode=production --node-env=production"
+    "compile:old": "webpack --mode=production --node-env=production && npx babel src/code/main.tsx --out-file dist/main.js",
+    "compile": "webpack --mode=production --node-env=production"
   },
   "keywords": [],
   "author": "",
@@ -47,6 +47,7 @@
     "axios": "^1.7.7",
     "normalize.css": "^8.0.1",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.1.1"
   }
 }
