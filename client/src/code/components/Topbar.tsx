@@ -2,7 +2,7 @@ import React from "react";
 import Button from "@mui/material/Button";
 import GameIcon from "@mui/icons-material/Games";
 
-const Topbar = ({ state }) => (
+const Topbar = () => (
 	<div>
 		<Button
 			variant="contained"

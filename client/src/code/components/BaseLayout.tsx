@@ -1,71 +1,58 @@
 // React imports.
-import React, { Component, useState, useEffect } from "react";
-import axios, { AxiosResponse } from "axios";
-
-// Library imports.
-import Dialog from "@mui/material/Dialog";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
+import React, { Component } from "react";
+import axios from "axios";
 
 // App imports.
-import { createState } from "../state";
-import Topbar from "./Topbar";
+import State from "../stateController";
+import Info from "./Info";
+import Wait from "./Wait";
+import Confirmation from "./Confirmation";
 
-/**
- * BaseLayout.
- */
 class BaseLayout extends Component {
-	/**
-	 * State data for the app.  This also includes all mutator functions for manipulating state.  That way, we only
-	 * ever have to pass this entire object down through props (not necessarily the best design in terms of data
-	 * encapsulation, but it does have the benefit of being quite a bit simpler).
-	 */
-	state = createState(this);
-
-	private data = "";
-
-	private async fetchData() {
-		try {
-			const response = await axios.get("http://127.0.0.1:8080/api/data");
-			console.log(response.data);
-			this.data = response.data;
-		} catch (err) {
-			console.log(err.message);
-		}
+	constructor(props: {}) {
+		super(props);
+		State.setBaseComponent(this);
 	}
 
 	componentDidMount() {
-		this.fetchData().then(() => {
-			this.setState({})
-			console.log("fetched");
-		});
 	}
 
-	/**
-	 * Render().
-	 */
+	// private async fetchData() {
+	// 	try {
+	// 		const response = await axios.get("http://127.0.0.1:8080/api/data");
+	// 		console.log(response.data);
+	// 		this.data = response.data;
+	// 	} catch (err) {
+	// 		console.log(err.message);
+	// 	}
+	// }
+
+	// componentDidMount() {
+	// 	State.setLoading(true);
+	// 	this.fetchData().then(() => {
+	// 		console.log("fetched");
+	// 		// State.showInfo("Did you know?", "That I can spawn text in this window! just like you are seeing rn :3\n (also fetch succeeded btw :3)")
+	// 		State.showConfirmation("Do you acknowledge that fetch has succeeded?", this.acknowledge);
+	// 		State.setLoading(false);
+	// 	});
+	// }
+
+	// private acknowledge(result: boolean): void {
+	// 	if (result)
+	// 		console.log("acknowledged YES");
+	// 	else
+	// 		console.log("acknowledged NO");
+	// }
+
 	render() {
-		console.log("rendering");
 		return ((
-			<div className="appContainer">
-				<Dialog
-					open={ this.state.pleaseWaitVisible }
-					disableEscapeKeyDown={ true }
-					transitionDuration={ 0 }>
-					<DialogTitle style={{ textAlign:"center" }}>Please Wait</DialogTitle>
-					<DialogContent><DialogContentText>...Contacting server...</DialogContentText></DialogContent>
-				</Dialog>
-				<div className="topbar">
-					<Topbar state={ this.state } />
-				</div>
-				<h1>
-					Hello, {this.data}.
-				</h1>
+			<div>
+				<Wait />
+				<Info />
+				<Confirmation />
 			</div>
 		));
 	}
 }
-
 
 export default BaseLayout;

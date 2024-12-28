@@ -10,7 +10,7 @@
     "watch": "webpack --watch",
     "serve": "webpack serve",
     "compile:old": "webpack --mode=production --node-env=production && npx babel src/code/main.tsx --out-file dist/main.js",
-    "compile": "webpack --mode=production --node-env=production"
+    "compile": "webpack --mode=development"
   },
   "keywords": [],
   "author": "",
@@ -41,6 +41,7 @@
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
+    "@fontsource/roboto": "^5.1.0",
     "@mui/icons-material": "^6.1.7",
     "@mui/material": "^6.1.7",
     "@types/react": "^18.3.12",

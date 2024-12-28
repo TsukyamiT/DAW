@@ -5,23 +5,28 @@ import "../css/main.css";
 // React imports.
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 
 // App imports.
-import BaseLayout from "./components/BaseLayout";
-// import * as IMAP from "./IMAP";
-// import * as Contacts from "./Contacts";
+import FrontPage from "./endpoints/FrontPage";
+import Leaderboard from "./endpoints/Leaderboard";
+import State from "./stateController";
 
+const SetupNavigator = () => {
+	State.setNavigator(useNavigate());
+	return null;
+}
 
-const baseComponent = ReactDOM.render(
+ReactDOM.render(
 	<Router>
+		<SetupNavigator />
 		<Routes>
-			<Route path="/home" element={<BaseLayout />} />
+			<Route path="/" element={<FrontPage />} />
+			<Route path="/leaderboard" element={<Leaderboard />} />
 		</Routes>
 	</Router>,
 	document.body
 );
-
 
 // Now go fetch the user's mailboxes, and then their contacts.
 // baseComponent.state.showHidePleaseWait(false);
