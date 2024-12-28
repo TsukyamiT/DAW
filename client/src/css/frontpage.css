@@ -1,0 +1,22 @@
+.frontpage {
+	height: 100vh;
+	width: 100vw;
+	overflow: hidden;
+}
+
+.frontpage-games {
+	display: flex;
+	justify-content: space-between;
+	height: 100%;
+	width: 100%;
+}
+
+.frontpage-right,
+.frontpage-left {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	margin: 20px;
+	width: 50%;
+	height: 100%;
+}

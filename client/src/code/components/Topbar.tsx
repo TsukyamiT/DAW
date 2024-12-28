@@ -1,28 +1,34 @@
 import React from "react";
-import Button from "@mui/material/Button";
-import GameIcon from "@mui/icons-material/Games";
+
+import TopbarButton from "./TopbarButton";
+import ProfileButton from "./ProfileButton";
+import State from "../stateController";
 
 const Topbar = () => (
-	<div>
-		<Button
-			variant="contained"
-			color="primary"
-			size="small"
-			style={{ marginRight:10 }}
-			onClick={() => {/* FIXME */}}>
+	<div className="topbar">
+		<div className="topbar-main">
+			<TopbarButton text="Home" onClick={() => {
+				State.navigate("/");
+			}} />
+			<TopbarButton text="Leaderboard" onClick={() => {
+				State.navigate("/leaderboard");
+			}} />
+			<TopbarButton text="Stats" onClick={() => {
 
-			<GameIcon style={{ marginRight:10 }} />
-			Guilty Gear
-		</Button> <Button
-			variant="contained"
-			color="primary"
-			size="small"
-			style={{ marginRight:10 }}
-			onClick={() => {/* FIXME */}}>
+			}} />
+			<TopbarButton text="About" onClick={() => {
 
-			<GameIcon style={{ marginRight:10 }} />
-			Overwatch
-		</Button>
+			}} />
+			<TopbarButton text="Find Players" onClick={() => {
+
+			}} />
+			<TopbarButton text="Add Match" onClick={() => {
+
+			}} />
+		</div>
+		<div className="topbar-right">
+			<ProfileButton />
+		</div>
 	</div>
 );
 

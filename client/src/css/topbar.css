@@ -1,0 +1,30 @@
+.topbar {
+	position: relative;
+	background-color: var(--topbar-color);
+	width: 100vw;
+	height: var(--topbar-size);
+	/* display: flex; */
+}
+
+.topbar-button {
+	height: 100%;
+}
+
+.topbar-main {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	gap: 20px;
+}
+
+.topbar-right {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: var(--profile-button-size);
+	height: 100%;
+	display: flex;
+	justify-content: right;
+}

@@ -11,8 +11,8 @@ class Leaderboard extends Component {
 
 	render() {
 		return (
-			<div className="leaderboard">
-				<Page title="Leaderboard" />
+			<div className="login">
+				<Page title="Login" />
 			</div>
 		);
 	}

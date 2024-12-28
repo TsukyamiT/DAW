@@ -1,4 +1,5 @@
 import { Component } from "react";
+import pfpDefault from "../images/pfp_default.jpg";
 
 export type ConfirmationCallback = (result: boolean) => void;
 
@@ -32,9 +33,18 @@ export abstract class State {
 	private static _confirmationContents = "";
 	private static _confirmationCallback = null;
 
+	// the navigator function to navigate to different endpoints
 	private static _navigator = null;
 
 	private static _currentGame = Game.ggst;
+
+	// user attributes
+	private static _isSignedIn = false;
+	private static _username = "SIGN UP";
+	private static _profilePicture = pfpDefault;
+
+	// profile button widget
+	private static _isShowingProfileButtonWidget = false;
 
 	// --------------------------------------------------------
 	// METHODS
@@ -49,7 +59,14 @@ export abstract class State {
 	}
 
 	public static navigate(endpoint: string) {
+		this.navigationResetables();
 		this._navigator(endpoint);
+	}
+
+	// stuff that needs to be reset upon navigating
+	public static navigationResetables()
+	{
+		this._isShowingProfileButtonWidget = false;
 	}
 
 	public static setLoading(value: boolean): void {
@@ -125,6 +142,27 @@ export abstract class State {
 
 	public static currentGame(): Game {
 		return this._currentGame;
+	}
+
+	public static getProfilePicture(): string {
+		return this._profilePicture;
+	}
+
+	public static getUsername(): string {
+		return this._username;
+	}
+
+	public static isSignedIn(): boolean {
+		return this._isSignedIn;
+	}
+
+	public static toggleProfileButtonWidget(): void {
+		this._isShowingProfileButtonWidget = !this._isShowingProfileButtonWidget;
+		this.update();
+	}
+
+	public static isShowingProfileButtonWidget(): boolean {
+		return this._isShowingProfileButtonWidget;
 	}
 }
 

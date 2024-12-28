@@ -1,0 +1,53 @@
+.profileButton {
+	width: 100%;
+	height: 100%;
+}
+
+.profileButton-button {
+	margin: 0px;
+	padding: 0px;
+	border: none;
+	background: none;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	cursor: pointer;
+
+	color: var(--main-text-color);
+}
+
+.profileButton-img {
+	border-radius: 50%;
+	aspect-ratio: 1 / 1;
+	height: 80%;
+	padding: 20px;
+}
+
+.profileButton-widget {
+	position: absolute;
+	top: var(--topbar-size);
+	right: 0;
+	margin: 10px;
+
+	background-color: var(--topbar-color);
+	width: var(--profile-button-size);
+
+	display: flex;
+	flex-direction: column;
+}
+
+.profileButton-widget-button {
+	border: none;
+	background: none;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+
+	cursor: pointer;
+	/* color: var(--main-text-color-dark); */
+}

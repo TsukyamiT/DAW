@@ -1,8 +1,20 @@
 :root {
-	/* --main-bg-color: #2b2b30; */
 	--main-bg-color: #01011c;
 	--main-text-color: #b4b4bf;
+	--main-text-color-dark: #131314;
+	--topbar-size: 75px;
+	--topbar-color: #8a0f17;
+	--profile-button-size: 300px;
 }
+
+body {
+	background-color: var(--main-bg-color);
+}
+
+@import url("topbar.css");
+@import url("bannerButton.css");
+@import url("frontpage.css");
+@import url("profileButton.css");
 
 /* The buttons in the confirmation popup */
 .confirmationButtons {
@@ -11,77 +23,14 @@
 	justify-content: center;
 	align-items: center;
 }
-
-/* The bar on the top */
-.topbar {
-  /* grid-column : 1 / 4; */
-  /* grid-row : 1 / 1; */
-  /* border-bottom : 1px solid #e0e0e0; */
-  padding-top : 8px;
-  padding-left : 4px;
-}
-
-/* banner that is a button */
-.bannerButton {
-	/* margin: 20px; */
-	width: 100%;
-	height: 25%;
-}
-
-/* banner that is a button */
-.bannerButton_button {
-	/* make the image the actual button */
-	margin: 0px;
-	padding: 0px;
-	border: none;
-	background: none;
-	width: 100%;
-	height: 100%;
-	overflow: hidden;
-
-	display: flex;
-	justify-content: center;
-	align-items: center;
-
-	border-radius: 15px;
-	cursor: pointer;
-}
-
-/* the banener of the banner button */
-.bannerButton_banner {
-	/* height: 100%; */
-	display: block;
-	width: 100%;
-	object-fit: cover;
-}
-
-.frontpage {
-	background-color: var(--main-bg-color);
-	height: 100vh;
-	width: 100vw;
-	overflow: hidden;
-}
-
-.frontpage-games {
-	display: flex;
-	justify-content: space-between;
-	height: 100%;
-	width: 100%;
-}
-
-.frontpage-right,
-.frontpage-left {
-	display: flex;
-	flex-direction: column;
-	gap: 20px;
-	margin: 20px;
-	width: 50%;
-	height: 100%;
-}
-
+/* the title of each page */
 .page-title {
 	color: var(--main-text-color);
 	text-align: center;
 	padding-top: 5vh;
 	padding-bottom: 5vh;
+}
+
+
+.leaderboard {
 }

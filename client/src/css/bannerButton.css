@@ -1,0 +1,30 @@
+.bannerButton {
+	/* margin: 20px; */
+	width: 100%;
+	height: 25%;
+}
+
+.bannerButton_button {
+	/* make the image the actual button */
+	margin: 0px;
+	padding: 0px;
+	border: none;
+	background: none;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	border-radius: 15px;
+	cursor: pointer;
+}
+
+.bannerButton_banner {
+	/* height: 100%; */
+	display: block;
+	width: 100%;
+	object-fit: cover;
+}
