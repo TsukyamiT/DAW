@@ -15,6 +15,7 @@ body {
 @import url("bannerButton.css");
 @import url("frontpage.css");
 @import url("profileButton.css");
+@import url("login.css");
 
 /* The buttons in the confirmation popup */
 .confirmationButtons {
@@ -27,10 +28,11 @@ body {
 .page-title {
 	color: var(--main-text-color);
 	text-align: center;
-	padding-top: 5vh;
-	padding-bottom: 5vh;
+	padding-top: 75px;
+	padding-bottom: 75px;
 }
 
 
 .leaderboard {
 }
+

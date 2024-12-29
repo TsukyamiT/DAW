@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -9,21 +18,26 @@ const express_1 = __importDefault(require("express"));
 // import { IGame_list } from "./game-list";
 // import * as Game_Player_list from "./game-player-list";
 // import { IGame_Player_list } from "./game-player-list";
+const auth_1 = __importDefault(require("./auth"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
-// app.use("/*", (req, res) => {
-// 	res.sendFile(path.join(__dirname, "../../client/dist/index.html"));
-// });
 app.use(express_1.default.static(path_1.default.join(__dirname, "../../client/dist")));
-app.get('/api/data', (req, res) => {
-    res.send("OwO :3");
-});
 app.use(function (inRequest, inResponse, inNext) {
-    inResponse.header("Acces-Control-Allow-Origin", "*");
+    inResponse.header("Access-Control-Allow-Origin", "*");
     inResponse.header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
     inResponse.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     inNext();
 });
+app.post('/api/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const auth = new auth_1.default();
+    const loginStatus = yield auth.login(req.body);
+    res.json(loginStatus);
+}));
+app.post('/api/register', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const auth = new auth_1.default();
+    const registerStatus = yield auth.register(req.body);
+    res.json(registerStatus);
+}));
 app.get('/*', (req, res) => {
     res.sendFile(path_1.default.join(__dirname, "../../client/dist/index.html"));
 });

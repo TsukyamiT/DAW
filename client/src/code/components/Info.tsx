@@ -5,6 +5,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import Typography from "@mui/material/Typography";
 
 import State from "../stateController";
 
@@ -14,7 +15,13 @@ const Info = () => (
 			open={ State.isShowingInfo() }
 			transitionDuration={ 0 }>
 			<DialogTitle style={{ textAlign:"center" }}>{ State.infoTitle() }</DialogTitle>
-			<DialogContent><DialogContentText>{ State.infoContents() }</DialogContentText></DialogContent>
+			<DialogContent>
+				<DialogContentText>
+					<Typography variant="body1" style={{whiteSpace: 'pre-line'}}>
+						{ State.infoContents() }
+					</Typography>
+				</DialogContentText>
+			</DialogContent>
 			<Button
 				variant="text"
 				onClick={() => {

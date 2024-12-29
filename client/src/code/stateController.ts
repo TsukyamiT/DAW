@@ -1,4 +1,5 @@
 import { Component } from "react";
+import Authenticator from "./auth";
 import pfpDefault from "../images/pfp_default.jpg";
 
 export type ConfirmationCallback = (result: boolean) => void;

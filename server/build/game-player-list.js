@@ -1,120 +1,100 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Worker = void 0;
-const path = __importStar(require("path"));
-const Datastore = require("nedb");
-class Worker {
-    constructor() {
-        this.db = new Datastore({
-            filename: path.join(__dirname, "game_player_list.db"),
-            autoload: true
-        });
-    }
-    listPlayers() {
-        return new Promise((inResolve, inReject) => {
-            this.db.find({}, (inError, inDocs) => {
-                if (inError) {
-                    inReject(inError);
-                }
-                else {
-                    inResolve(inDocs);
-                }
-            });
-        });
-    }
-    listPlayersByGame(inGame_name) {
-        return new Promise((inResolve, inReject) => {
-            this.db.find({ game_name: inGame_name }, (inError, inDocs) => {
-                if (inError) {
-                    inReject(inError);
-                }
-                else {
-                    inResolve(inDocs);
-                }
-            });
-        });
-    }
-    addPlayer(inPlayer) {
-        return new Promise((inResolve, inReject) => {
-            this.db.find({ game_name: inPlayer.game_name, rank_position: inPlayer.rank_position }, (inError, inDocs) => {
-                if (inError) {
-                    inReject(inError);
-                }
-                else {
-                    this.db.insert(inPlayer, (inError, inNewDoc) => {
-                        if (inError) {
-                            inReject(inError);
-                        }
-                        else {
-                            inResolve(inNewDoc);
-                        }
-                    });
-                }
-            });
-        });
-    }
-    deletePlayerByID(inID) {
-        return new Promise((inResolve, inReject) => {
-            this.db.remove({ _id: inID }, {}, (inError, inNumRemoved) => {
-                if (inError) {
-                    inReject(inError);
-                }
-                else if (inNumRemoved === 0) {
-                    inReject(new Error(`No player found with ID: ${inID}`));
-                }
-                else {
-                    inResolve();
-                }
-            });
-        });
-    }
-    deletePlayerByName(inName) {
-        return new Promise((inResolve, inReject) => {
-            this.db.remove({ nickname: inName }, {}, (inError, inNumRemoved) => {
-                if (inError) {
-                    inReject(inError);
-                }
-                else if (inNumRemoved === 0) {
-                    inReject(new Error(`No player found with name: ${inName}`));
-                }
-                else {
-                    inResolve();
-                }
-            });
-        });
-    }
-}
-exports.Worker = Worker;
+// import * as path from "path";
+// const Datastore = require("nedb");
+//
+// export interface IGame_Player_list {
+//     _id?: string, game_name: string, nickname: string, rank_position: number;
+// }
+//
+// export class Worker {
+//     private db: Nedb;
+//     constructor() {
+//         this.db = new Datastore({
+//             filename: path.join(__dirname, "game_player_list.db"),
+//             autoload: true
+//         });
+//
+//     }
+//     
+//     public listPlayers(): Promise<IGame_Player_list[]> {
+//         return new Promise((inResolve, inReject) => {
+//             this.db.find({ }, 
+//                 (inError: Error | null, inDocs: IGame_Player_list[]) => {
+//                     if(inError){
+//                         inReject(inError);
+//                     }
+//                     else {
+//                         inResolve(inDocs);
+//                     }
+//                 }
+//             )
+//         })
+//     }
+//
+//     public listPlayersByGame(inGame_name: string): Promise<IGame_Player_list> {
+//         return new Promise((inResolve, inReject) => {
+//             this.db.find({game_name : inGame_name}, 
+//                 (inError: Error | null, inDocs: IGame_Player_list) => {
+//                     if(inError){
+//                         inReject(inError);
+//                     }
+//                     else {
+//                         inResolve(inDocs);
+//                     }
+//                 }
+//             )
+//         })
+//     }
+//
+//
+//     public addPlayer(inPlayer: IGame_Player_list): Promise<IGame_Player_list> {
+//         return new Promise((inResolve, inReject) => {
+//             this.db.find({ game_name: inPlayer.game_name, rank_position: inPlayer.rank_position }, 
+//                 (inError: Error | null, inDocs: IGame_Player_list[]) => {
+//                     if (inError) {
+//                         inReject(inError);
+//                     }
+//                     else {
+//                         this.db.insert(inPlayer, 
+//                             (inError: Error | null, inNewDoc: IGame_Player_list) => {
+//                                 if (inError) {
+//                                     inReject(inError);
+//                                 } else {
+//                                     inResolve(inNewDoc);
+//                                 }
+//                             }
+//                         );
+//                     }
+//                 }
+//             );
+//         });
+//     }
+//
+//     public deletePlayerByID(inID: string): Promise<void> {
+//         return new Promise((inResolve, inReject) => {
+//             this.db.remove({ _id: inID }, {}, (inError: Error | null, inNumRemoved: number) => {
+//                 if (inError) {
+//                     inReject(inError);
+//                 } else if (inNumRemoved === 0) {
+//                    inReject(new Error(`No player found with ID: ${inID}`));
+//                 } else {
+//                     inResolve();
+//                 }
+//             });
+//         });
+//     }
+//     
+//     public deletePlayerByName(inName: string): Promise<void> {
+//         return new Promise((inResolve, inReject) => {
+//             this.db.remove({ nickname: inName }, {}, (inError: Error | null, inNumRemoved: number) => {
+//                 if (inError) {
+//                     inReject(inError);
+//                 } else if (inNumRemoved === 0) {
+//                     inReject(new Error(`No player found with name: ${inName}`));
+//                 } else {
+//                     inResolve();
+//                 }
+//             });
+//         });
+//     }
+// }

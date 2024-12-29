@@ -5,27 +5,33 @@ import express, { Express, NextFunction, Request, Response } from "express";
 // import { IGame_list } from "./game-list";
 // import * as Game_Player_list from "./game-player-list";
 // import { IGame_Player_list } from "./game-player-list";
+import Authenticator from "./auth";
 
 const app : Express = express();
 
 app.use(express.json());
 
-// app.use("/*", (req, res) => {
-// 	res.sendFile(path.join(__dirname, "../../client/dist/index.html"));
-// });
-
 app.use(express.static(path.join(__dirname, "../../client/dist")))
 
-app.get('/api/data', (req, res) => {
-	res.send("OwO :3");
-});
-
 app.use(function(inRequest: Request, inResponse: Response, inNext: NextFunction){
-    inResponse.header("Acces-Control-Allow-Origin", "*");
+    inResponse.header("Access-Control-Allow-Origin", "*");
     inResponse.header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
     inResponse.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     inNext();
 });
+
+app.post('/api/login', async (req, res) => {
+	const auth = new Authenticator();
+	const loginStatus = await auth.login(req.body);
+	res.json(loginStatus);
+});
+
+app.post('/api/register', async (req, res) => {
+	const auth = new Authenticator();
+	const registerStatus = await auth.register(req.body);
+	res.json(registerStatus);
+});
+
 
 app.get('/*', (req, res) => {
 	res.sendFile(path.join(__dirname, "../../client/dist/index.html"))

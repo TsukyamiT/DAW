@@ -11,6 +11,7 @@ import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-route
 import FrontPage from "./endpoints/FrontPage";
 import Leaderboard from "./endpoints/Leaderboard";
 import Login from "./endpoints/Login";
+import Register from "./endpoints/Register";
 import State from "./stateController";
 
 const SetupNavigator = () => {
@@ -25,6 +26,7 @@ ReactDOM.render(
 			<Route path="/" element={<FrontPage />} />
 			<Route path="/leaderboard" element={<Leaderboard />} />
 			<Route path="/login" element={<Login />} />
+			<Route path="/register" element={<Register />} />
 		</Routes>
 	</Router>,
 	document.body

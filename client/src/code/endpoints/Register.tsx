@@ -6,7 +6,7 @@ import Page from "../components/Page";
 import LightTextInput from "../components/LightTextInput";
 import Button from "@mui/material/Button";
 
-class Login extends Component {
+class Register extends Component {
 	constructor(props: {}) {
 		super(props);
 		State.setBaseComponent(this)
@@ -17,8 +17,9 @@ class Login extends Component {
 
 	render() {
 		return (
+			// purposefully using login stuff - take care!
 			<div className="login-page">
-				<Page title="Login" />
+				<Page title="Register " />
 				<div style={{ marginBottom: '50' }} />
 				<div className="login-input">
 					<LightTextInput
@@ -40,17 +41,17 @@ class Login extends Component {
 						}}
 					/>
 					<Button variant="text" size="small" onClick={() => {
-						State.navigate("/register");
+						State.navigate("/login");
 					}}>
-						I don't have an account
+						I already have an account
 					</Button>
 
 					<div style={{ marginBottom: '30px' }} />
 
 					<Button variant="contained" onClick={() => {
-						Authenticator.login(this.currUsername, this.currPassword);
+						Authenticator.register(this.currUsername, this.currPassword);
 					}}>
-						Login
+						Register
 					</Button>
 				</div>
 			</div>
@@ -58,4 +59,4 @@ class Login extends Component {
 	}
 }
 
-export default Login;
+export default Register;
