@@ -59,8 +59,7 @@ class Profiles {
         return __awaiter(this, void 0, void 0, function* () {
             const auth = new auth_1.default();
             const id = yield auth.getUserId(username);
-            const profile = yield this.find({ _id: id });
-            const updated = yield this.update({ userid: id }, { picture: picture });
+            const updated = yield this.update({ userid: id }, { userid: id, picture: picture });
             if (!updated)
                 console.error("couldn't update profile.");
         });
@@ -79,22 +78,11 @@ class Profiles {
             return profile;
         });
     }
-    setRating(username, rating) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const auth = new auth_1.default();
-            const id = yield auth.getUserId(username);
-            const profile = yield this.find({ _id: id });
-            const updated = yield this.update({ userid: id }, { rating: rating });
-            if (!updated)
-                console.error("couldn't update profile.");
-        });
-    }
     setDesc(username, desc) {
         return __awaiter(this, void 0, void 0, function* () {
             const auth = new auth_1.default();
             const id = yield auth.getUserId(username);
-            const profile = yield this.find({ _id: id });
-            const updated = yield this.update({ userid: id }, { description: desc });
+            const updated = yield this.update({ userid: id }, { userid: id, description: desc });
             if (!updated)
                 console.error("couldn't update profile.");
         });

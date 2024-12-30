@@ -136,7 +136,7 @@ class Authenticator {
     getUserId(username) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield this.findUser(username);
-            if (user._id == undefined)
+            if (user === undefined || user === null || user._id === undefined)
                 return "-1";
             return user._id;
         });

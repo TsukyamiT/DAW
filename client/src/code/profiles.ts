@@ -1,11 +1,25 @@
 import axios, { AxiosResponse } from "axios";
 import { config } from "./config";
-import State from "./stateController";
+import State, { Game } from "./stateController";
 
 export interface IProfile {
 	_id?: string,
-	picture: string,
-	description: string,
+	userid: string,
+	username?: string,
+	picture?: string,
+	description?: string,
+	rating?: number,
+}
+
+export type ProfileData = {
+	username: string,
+	password: string,
+	picture?: string,
+	description?: string,
+	rating?: number,
+
+	newUsername?: string,
+	newPassword?: string,
 }
 
 export default class Profiles {

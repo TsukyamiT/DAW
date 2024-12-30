@@ -45,97 +45,63 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Game = exports.Result = void 0;
 const path = __importStar(require("path"));
 const nedb_1 = __importDefault(require("nedb"));
 const auth_1 = __importDefault(require("./auth"));
-var Result;
-(function (Result) {
-    Result[Result["none"] = 0] = "none";
-    Result[Result["win"] = 1] = "win";
-    Result[Result["loss"] = 2] = "loss";
-    Result[Result["draw"] = 3] = "draw";
-})(Result || (exports.Result = Result = {}));
-var Game;
-(function (Game) {
-    Game[Game["none"] = 0] = "none";
-    Game[Game["ggst"] = 1] = "ggst";
-    Game[Game["lol"] = 2] = "lol";
-    Game[Game["ow"] = 3] = "ow";
-    Game[Game["cs"] = 4] = "cs";
-    Game[Game["rl"] = 5] = "rl";
-    Game[Game["val"] = 6] = "val";
-})(Game || (exports.Game = Game = {}));
-class Matches {
+class PlayerRatings {
     constructor() {
         this.db = new nedb_1.default({
-            filename: path.join(__dirname, "matches.db"),
+            filename: path.join(__dirname, "player_ratings.db"),
             autoload: true
         });
     }
-    add(match) {
+    getGameRatings(game) {
         return __awaiter(this, void 0, void 0, function* () {
-            const auth = new auth_1.default();
-            let result = {
-                success: true,
-                validLogin: true,
-                validData: true,
-            };
-            // check login
-            if (!(yield auth.validLogin(match.username, match.password))) {
-                result.success = false;
-                result.validLogin = false;
-            }
-            // check data
-            const tenMinutes = Date.now() - 600000;
-            match.date = new Date(match.date); // fixes weird bug
-            if (match.result === Result.none ||
-                match.game === Game.none ||
-                match.rating < 0 ||
-                match.date.getTime() < tenMinutes ||
-                match.date.getTime() > Date.now()) {
-                result.success = false;
-                result.validData = false;
-            }
-            if (result.success) {
-                result.success = yield this.forceAdd(match);
-                // const ratings = new PlayerRatings();
-                // await ratings.setRating(match.username, match.game, match.rating);
-            }
+            const result = yield this.find({ game: game });
             return result;
         });
     }
-    forceAdd(match) {
+    getPlayerRatings(username) {
         return __awaiter(this, void 0, void 0, function* () {
             const auth = new auth_1.default();
-            let matchEntry = {
-                userid: yield auth.getUserId(match.username),
-                date: match.date,
-                result: match.result,
-                game: match.game,
-                rating: match.rating,
-            };
-            try {
-                yield this.addDb(matchEntry);
-            }
-            catch (error) {
-                console.error(error);
-                return false;
-            }
-            return true;
+            const id = yield auth.getUserId(username);
+            const result = yield this.find({ userid: id });
+            return result;
         });
     }
-    addDb(obj) {
+    setRating(username, game, rating) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const auth = new auth_1.default();
+            const id = yield auth.getUserId(username);
+            const updated = yield this.update({ userid: id, game: game }, { userid: id, rating: rating, game: game, username: username });
+            if (!updated)
+                console.error("couldn't update profile.");
+        });
+    }
+    find(obj) {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((inResolve, inReject) => {
-                this.db.insert(obj, (inError, inNewDoc) => {
+                this.db.find(obj, (inError, inDocs) => {
                     if (inError)
                         inReject(inError);
                     else
-                        inResolve(inNewDoc);
+                        inResolve(inDocs);
+                });
+            });
+        });
+    }
+    update(obj, updatedObj) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const options = { upsert: true };
+            return new Promise((inResolve, inReject) => {
+                this.db.update(obj, updatedObj, options, (inError, numUpdated, upsert) => {
+                    if (inError)
+                        inReject(inError);
+                    else
+                        inResolve(numUpdated > 0);
                 });
             });
         });
     }
 }
-exports.default = Matches;
+exports.default = PlayerRatings;

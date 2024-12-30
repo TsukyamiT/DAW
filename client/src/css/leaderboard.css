@@ -1,0 +1,11 @@
+.leaderboard {
+}
+
+.leaderboard-area {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+.leaderboard-table {
+	width: 80%;
+}

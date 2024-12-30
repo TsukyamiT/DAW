@@ -14,13 +14,13 @@ const Topbar = () => (
 				State.navigate("/leaderboard");
 			}} />
 			<TopbarButton text="Stats" onClick={() => {
-
+				State.navigate("/stats");
 			}} />
 			<TopbarButton text="About" onClick={() => {
-
+				State.navigate("/about");
 			}} />
 			<TopbarButton text="Find Players" onClick={() => {
-
+				State.navigate("/find");
 			}} />
 			<TopbarButton text="Add Match" onClick={() => {
 				State.navigate("/add-match");

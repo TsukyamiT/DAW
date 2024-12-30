@@ -2,8 +2,9 @@ import path from "path";
 import express, { Express, NextFunction, Request, Response } from "express";
 
 import Authenticator, { ILogin } from "./auth";
-import Profiles from "./profiles";
-import Matches from "./matches";
+import Profiles, { IProfile } from "./profiles";
+import Matches, { Game, MatchData } from "./matches";
+import PlayerRatings from "./ratings";
 
 const app : Express = express();
 
@@ -11,6 +12,7 @@ app.use(express.json());
 
 app.use(express.static(path.join(__dirname, "../../client/dist")))
 
+// cors
 app.use(function(inRequest: Request, inResponse: Response, inNext: NextFunction){
     inResponse.header("Access-Control-Allow-Origin", "*");
     inResponse.header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
@@ -18,149 +20,81 @@ app.use(function(inRequest: Request, inResponse: Response, inNext: NextFunction)
     inNext();
 });
 
+// APIs
 app.post('/api/login', async (req, res) => {
-	const auth = new Authenticator();
-	const loginStatus = await auth.login(req.body);
-	res.json(loginStatus);
+	try {
+		const auth = new Authenticator();
+		const loginStatus = await auth.login(req.body);
+		res.json(loginStatus);
+	} catch (error) {
+		console.error("error on login: " + error);
+	}
 });
 
 app.post('/api/register', async (req, res) => {
-	const auth = new Authenticator();
-	const registerStatus = await auth.register(req.body);
-	res.json(registerStatus);
+	try {
+		const auth = new Authenticator();
+		const registerStatus = await auth.register(req.body);
+		res.json(registerStatus);
+	} catch (error) {
+		console.error("error on registering: " + error);
+	}
 });
 
 app.post('/api/add-match', async (req, res) => {
-	const matches = new Matches();
-	const matchAddStatus = await matches.add(req.body);
-	res.json(matchAddStatus);
+	try {
+		const matches = new Matches();
+		const match: MatchData = req.body;
+		const matchAddStatus = await matches.add(req.body);
+		if (matchAddStatus.success) {
+			const ratings = new PlayerRatings();
+			ratings.setRating(match.username, match.game, match.rating);
+		}
+		res.json(matchAddStatus);
+	} catch (error) {
+		console.error("error on adding match: " + error);
+	}
 });
 
 app.get("/api/profile/:username", async (req, res) => {
-	const profiles = new Profiles();
-	const profile = await profiles.getProfile(req.params.username);
-	res.json(profile);
+	try {
+		const profiles = new Profiles();
+		const profile = await profiles.getProfile(req.params.username);
+		res.json(profile);
+	} catch (error) {
+		console.error("error on getting profile: " + error);
+	}
 })
+
+app.get("/api/ratings/game/:game", async (req, res) => {
+	try {
+		const ratings = new PlayerRatings();
+		const rating: IProfile[] = await ratings.getGameRatings(Number(req.params.game));
+		res.json(rating);
+	} catch (error) {
+		console.error("error on getting game ratings: " + error);
+	}
+})
+
+app.get("/api/ratings/player/:username", async (req, res) => {
+	try {
+		const ratings = new PlayerRatings();
+		const rating: IProfile[] = await ratings.getPlayerRatings(req.params.username);
+		res.json(rating);
+	} catch (error) {
+		console.error("error on getting player ratings: " + error);
+	}
+})
+
+
+
 
 // client routing
 app.get('/*', (req, res) => {
 	res.sendFile(path.join(__dirname, "../../client/dist/index.html"))
 });
 
-// app.get("/game-list",
-//     async(inResquest: Request, inResponse: Response) => {
-//         try{
-//             const game_listWorker: Game_list.Worker = new Game_list.Worker();
-//             const game_list: IGame_list[] = await game_listWorker.listGames();
-//             inResponse.json(game_list);
-//
-//         }
-//         catch(inError)
-//         {
-//             inResponse.send("error");
-//         }
-//     }
-// );
-//
-// app.get("/game-list/:id",
-//     async(inResquest: Request, inResponse: Response) => {
-//         try{
-//             const game_listWorker: Game_list.Worker = new Game_list.Worker();
-//             const game_list: IGame_list = await game_listWorker.listGamesID(inResquest.params.id);
-//             inResponse.json(game_list);
-//
-//         }
-//         catch(inError)
-//         {
-//             inResponse.send("error");
-//         }
-//     }
-// );
-//
-// app.get("/game-list/name/:name", 
-//     async (inRequest: Request, inResponse: Response) => {
-//         try {
-//             const name = inRequest.params.name as string;
-//
-//             const game_listWorker: Game_list.Worker = new Game_list.Worker();
-//             const game_list: IGame_list[] = await game_listWorker.listGamesName(name);
-//             
-//             inResponse.json(game_list);
-//         } catch (inError) {
-//             inResponse.send("error");
-//         }
-//     }
-// );
-//
-// app.post("/game-list", 
-//     async(inRequest: Request, inResponse: Response) => {
-//         try{
-//             const game_listWorker: Game_list.Worker = new Game_list.Worker();
-//             const game_list: IGame_list = await game_listWorker.addGame(inRequest.body);
-//             inResponse.json(game_list);
-//         }
-//         catch(inError){
-//             inResponse.send("error");
-//         }
-//     }
-// );
-//
-// app.post("/players",
-//     async(inRequest: Request, inResponse:Response) => {
-//         try {
-//             const game_player_listWorker: Game_Player_list.Worker = new Game_Player_list.Worker();
-//             const game_player_list: IGame_Player_list = await game_player_listWorker.addPlayer(inRequest.body);
-//             inResponse.json(game_player_list);
-//         } catch (inError) {
-//             inResponse.send("error");
-//         }
-//     }
-// )
-//
-// app.get("/players",
-//     async(inResquest: Request, inResponse: Response) => {
-//         try{
-//             const game_player_listWorker: Game_Player_list.Worker = new Game_Player_list.Worker();
-//             const game_player_list: IGame_Player_list[] = await game_player_listWorker.listPlayers();
-//             inResponse.json(game_player_list);
-//
-//         }
-//         catch(inError)
-//         {
-//             inResponse.send("error");
-//         }
-//     }
-// )
-//
-// app.delete("/game-list/:id",
-//     async(inRequest: Request, inResponse: Response) => {
-//         try
-//         {
-//             const game_listWorker: Game_list.Worker = new Game_list.Worker();
-//             await game_listWorker.deleteGameByID(inRequest.params.id);
-//             inResponse.send("ok");
-//         }
-//         catch(inError){
-//             inResponse.send("error");
-//         }
-//     }
-// );
-//
-// app.delete("/game-list/name/:name",
-//     async(inRequest: Request, inResponse: Response) => {
-//         try
-//         {
-//             const game_listWorker: Game_list.Worker = new Game_list.Worker();
-//             await game_listWorker.deleteGameByName(inRequest.params.name);
-//             inResponse.send("ok");
-//         }
-//         catch(inError){
-//             inResponse.send("error");
-//         }
-//     }
-// );
-
-
+// start server
 app.listen(8080, () => {
 	console.log("Server is running.");
 });

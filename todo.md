@@ -1,16 +1,7 @@
-# Add Match
-## server-side
-- listen on endpoint "/api/add-match" for post
-- add matches.ts
-- check if login is valid
-- check if match is valid
-- add match to database (with account id)
-- return success
-
-# TODO GENERAL
-- wrap endpoint in server-side in try catches
+# Add leaderboard
 
 # BUGS
+- home page buttons break in small monitors
 - inserting text into input box and then deleting it and submitting
 
 # DONE
@@ -23,3 +14,10 @@
 - call post on "/api/add-match" with login info, date, game, result and new rating
 - must be logged in screen
 - show success/error message
+
+- listen on endpoint "/api/add-match" for post
+- add matches.ts
+- check if login is valid
+- check if match is valid
+- add match to database (with account id)
+- return success

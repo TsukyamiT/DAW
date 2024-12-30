@@ -14,11 +14,16 @@ import Leaderboard from "./endpoints/Leaderboard";
 import Login from "./endpoints/Login";
 import Register from "./endpoints/Register";
 import AddMatch from "./endpoints/AddMatch";
+import About from "./endpoints/About";
+import Stats from "./endpoints/Stats";
+import Find from "./endpoints/Find";
 
 const SetupNavigator = () => {
 	State.setNavigator(useNavigate());
 	return null;
 }
+
+document.title = "Game Rankings";
 
 ReactDOM.render(
 	<Router>
@@ -29,6 +34,9 @@ ReactDOM.render(
 			<Route path="/login" element={<Login />} />
 			<Route path="/register" element={<Register />} />
 			<Route path="/add-match" element={<AddMatch />} />
+			<Route path="/about" element={<About />} />
+			<Route path="/stats" element={<Stats />} />
+			<Route path="/find" element={<Find />} />
 		</Routes>
 	</Router>,
 	document.body

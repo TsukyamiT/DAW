@@ -3,6 +3,7 @@ import Datastore from "nedb";
 
 import Authenticator from "./auth";
 import Profiles from "./profiles";
+import PlayerRatings from "./ratings";
 
 export enum Result {
 	none,
@@ -84,8 +85,8 @@ export default class Matches {
 
 		if (result.success) {
 			result.success = await this.forceAdd(match);
-			const profiles = new Profiles();
-			await profiles.setRating(match.username, match.rating);
+			// const ratings = new PlayerRatings();
+			// await ratings.setRating(match.username, match.game, match.rating);
 		}
 
 		return result;

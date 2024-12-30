@@ -119,7 +119,7 @@ export default class Authenticator {
 
 	public async getUserId(username: string): Promise<string> {
 		const user = await this.findUser(username);
-		if (user._id == undefined)
+		if (user === undefined || user === null || user._id === undefined)
 			return "-1";
 		return user._id;
 	}

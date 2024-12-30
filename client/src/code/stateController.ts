@@ -51,6 +51,10 @@ export abstract class State {
 	// profile button widget
 	private static _isShowingProfileButtonWidget = false;
 
+	// leaderboard
+	private static _leaderboardPage = 0;
+	private static _leaderboardRowsPerPage = 100;
+
 	// --------------------------------------------------------
 	// METHODS
 	// --------------------------------------------------------
@@ -72,6 +76,8 @@ export abstract class State {
 	public static navigationResetables()
 	{
 		this._isShowingProfileButtonWidget = false;
+		this._leaderboardPage = 0;
+		this._leaderboardRowsPerPage = 100;
 	}
 
 	public static setLoading(value: boolean): void {
@@ -199,6 +205,24 @@ export abstract class State {
 		this._username = this.defaultUsername;
 		this._password = this.defaultPassword;
 		this._profilePicture = defaultPfp;
+		this.update();
+	}
+
+	public static getLeaderboardPage() {
+		return this._leaderboardPage;
+	}
+
+	public static setLeaderboardPage(value: number) {
+		this._leaderboardPage = value;
+		this.update();
+	}
+
+	public static getLeaderboardRowsPerPage() {
+		return this._leaderboardRowsPerPage;
+	}
+
+	public static setLeaderboardRowsPerPage(value: number) {
+		this._leaderboardRowsPerPage = value;
 		this.update();
 	}
 }
