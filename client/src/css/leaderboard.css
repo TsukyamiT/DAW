@@ -5,6 +5,7 @@
 	width: 100%;
 	display: flex;
 	justify-content: center;
+	padding-bottom: 75px;
 }
 .leaderboard-table {
 	width: 80%;

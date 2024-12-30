@@ -1,23 +1,47 @@
-# Add leaderboard
+# Add profile
+## client-side
+- add routing for profiles
+- add page
+- profile button takes user to their profile
+- make profile photo component
+- make profile description component
+- profile desciption component shows empty message
+- own profile should button for edit
+- fetch profile
+- game selection component
+- game stats screen
+- show best game
+## server-side
+- add endpoint
+- query db for profile
+- fetch profile
+- query db for user ratings
+- fetch ratings
+
+# Edit profile
+## client-side
+- add routing
+- add page
+- make page only work if logged in, with message otherwise
+- username box (with old one there)
+- password box (with old one there)
+- make big text insertion component
+- description box (with old one there)
+- make image selection component
+- image box (with old one there)
+- save button
+- validate data
+- send new data to server-side
+- show success
+## server-side
+- create endpoint
+- make edit only happen if valid login
+- validate data
+- update profile database
+- send profile success
 
 # BUGS
-- home page buttons break in small monitors
 - inserting text into input box and then deleting it and submitting
 
 # DONE
-- create Add Match page
-- make drop down component
-- place drop down component for game and result of match
-- place a "new rating" numeric field
-- gives error if empty or invalid
-- add match button
-- call post on "/api/add-match" with login info, date, game, result and new rating
-- must be logged in screen
-- show success/error message
-
-- listen on endpoint "/api/add-match" for post
-- add matches.ts
-- check if login is valid
-- check if match is valid
-- add match to database (with account id)
-- return success
+- home page buttons break in small monitors

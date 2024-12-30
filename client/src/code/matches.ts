@@ -46,7 +46,7 @@ export default class Matches {
 			const responseSuccess: MatchSuccess = response.data;
 
 			if (responseSuccess.success) {
-				State.navigate("/add-match");
+				State.navigate("/leaderboard");
 				State.showInfo("Add Match", "SUCCESS!");
 			} else {
 				let msg = "FAILED:";
