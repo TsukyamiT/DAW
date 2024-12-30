@@ -95,7 +95,7 @@ app.get("/api/ratings/player/:username", (req, res) => __awaiter(void 0, void 0,
     }
 }));
 // client routing
-app.get('/*', (req, res) => {
+app.get('*', (req, res) => {
     res.sendFile(path_1.default.join(__dirname, "../../client/dist/index.html"));
 });
 // start server

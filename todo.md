@@ -40,6 +40,8 @@
 - update profile database
 - send profile success
 
+# No page, page
+
 # BUGS
 - inserting text into input box and then deleting it and submitting
 

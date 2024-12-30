@@ -4,8 +4,9 @@ import "../css/main.css";
 
 // React imports.
 import React from "react";
+// import ReactDOM from "react-dom/client";
 import ReactDOM from "react-dom";
-import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useNavigate, BrowserRouter } from 'react-router-dom';
 
 // App imports.
 import State from "./stateController";
@@ -17,6 +18,7 @@ import AddMatch from "./endpoints/AddMatch";
 import About from "./endpoints/About";
 import Stats from "./endpoints/Stats";
 import Find from "./endpoints/Find";
+import Profile from "./endpoints/Profile";
 
 const SetupNavigator = () => {
 	State.setNavigator(useNavigate());
@@ -26,7 +28,7 @@ const SetupNavigator = () => {
 document.title = "Game Rankings";
 
 ReactDOM.render(
-	<Router>
+	<BrowserRouter>
 		<SetupNavigator />
 		<Routes>
 			<Route path="/" element={<FrontPage />} />
@@ -37,28 +39,33 @@ ReactDOM.render(
 			<Route path="/about" element={<About />} />
 			<Route path="/stats" element={<Stats />} />
 			<Route path="/find" element={<Find />} />
+			<Route path="/profile/:username" element={<Profile />} />
+			<Route path="/*" element={<Find />} />
 		</Routes>
-	</Router>,
+	</BrowserRouter>,
 	document.body
 );
 
-// Now go fetch the user's mailboxes, and then their contacts.
-// baseComponent.state.showHidePleaseWait(false);
-// async function getMailboxes() {
-//   const imapWorker: IMAP.Worker = new IMAP.Worker();
-//   const mailboxes: IMAP.IMailbox[] = await imapWorker.listMailboxes();
-//   mailboxes.forEach((inMailbox) => {
-//     baseComponent.state.addMailboxToList(inMailbox);
-//   });
+
+// export default function App() {
+// 	return (
+// 		<Router>
+// 		<SetupNavigator />
+// 			<Routes>
+// 				<Route path="/" element={<FrontPage />} />
+// 				<Route path="/leaderboard" element={<Leaderboard />} />
+// 				<Route path="/login" element={<Login />} />
+// 				<Route path="/register" element={<Register />} />
+// 				<Route path="/add-match" element={<AddMatch />} />
+// 				<Route path="/about" element={<About />} />
+// 				<Route path="/stats" element={<Stats />} />
+// 				<Route path="/find" element={<Find />} />
+// 				<Route path="/owo" element={<About />}>
+// 					<Route path="/owo/uwu" element={<About />} />
+// 				</Route>
+// 			</Routes>
+// 		</Router>
+// 	);
 // }
-// //getMailboxes().then(function() {
-//   // Now go fetch the user's contacts.
-//   async function getContacts() {
-//     const contactsWorker: Contacts.Worker = new Contacts.Worker();
-//     const contacts: Contacts.IContact[] = await contactsWorker.listContacts();
-//     contacts.forEach((inContact) => {
-//       baseComponent.state.addContactToList(inContact);
-//     });
-//   }
-//   getContacts().then(() => baseComponent.state.showHidePleaseWait(false));
-//});
+//
+// ReactDOM.createRoot(document.getElementById('root')).render(<React.StrictMode><App /></React.StrictMode>);

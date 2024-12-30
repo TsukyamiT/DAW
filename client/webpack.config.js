@@ -1,6 +1,6 @@
 // Generated using webpack-cli https://github.com/webpack/webpack-cli
 
-const path = require('path');
+const Path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 
@@ -14,7 +14,8 @@ const stylesHandler = 'style-loader';
 const config = {
     entry: "./src/code/main.tsx",
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: Path.resolve(__dirname, 'dist'),
+		publicPath: '/',
     },
     devServer: {
         open: true,
