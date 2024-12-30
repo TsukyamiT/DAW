@@ -1,11 +1,8 @@
 import path from "path";
 import express, { Express, NextFunction, Request, Response } from "express";
 
-// import * as Game_list from "./game-list";
-// import { IGame_list } from "./game-list";
-// import * as Game_Player_list from "./game-player-list";
-// import { IGame_Player_list } from "./game-player-list";
-import Authenticator from "./auth";
+import Authenticator, { ILogin } from "./auth";
+import Profiles from "./profiles";
 
 const app : Express = express();
 
@@ -32,7 +29,13 @@ app.post('/api/register', async (req, res) => {
 	res.json(registerStatus);
 });
 
+app.get("/api/profile/:username", async (req, res) => {
+	const profiles = new Profiles();
+	const profile = await profiles.getProfile(req.params.username);
+	res.json(profile);
+})
 
+// client routing
 app.get('/*', (req, res) => {
 	res.sendFile(path.join(__dirname, "../../client/dist/index.html"))
 });

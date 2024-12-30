@@ -1,0 +1,15 @@
+.add-match {
+	height: 100vh;
+	width: 100vw;
+	overflow: hidden;
+}
+
+.add-match-inputs {
+	display: flex;
+	justify-content: center;
+}
+
+.add-match-input {
+	width: 200px;
+	text-align: center;
+}

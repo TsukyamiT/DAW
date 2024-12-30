@@ -87,6 +87,12 @@ class Authenticator {
             return yield this.loginExact(attempt.username, attempt.password);
         });
     }
+    isLoginCorrect(username, password) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = yield this.loginExact(username, password);
+            return response.success;
+        });
+    }
     loginExact(username, password) {
         return __awaiter(this, void 0, void 0, function* () {
             let response = {
@@ -125,6 +131,26 @@ class Authenticator {
             if (matches.length < 1)
                 return false;
             return matches[0].password === password;
+        });
+    }
+    getUserId(username) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield this.findUser(username);
+            if (user._id == undefined)
+                return "-1";
+            return user._id;
+        });
+    }
+    findUser(username) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return new Promise((inResolve, inReject) => {
+                this.db.findOne({ username: username }, (inError, inDocs) => {
+                    if (inError)
+                        inReject(inError);
+                    else
+                        inResolve(inDocs);
+                });
+            });
         });
     }
     find(obj) {

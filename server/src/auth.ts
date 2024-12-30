@@ -69,6 +69,11 @@ export default class Authenticator {
 		return await this.loginExact(attempt.username, attempt.password);
 	}
 
+	public async isLoginCorrect(username: string, password: string): Promise<boolean> {
+		const response = await this.loginExact(username, password);
+		return response.success;
+	}
+
 	public async loginExact(username: string, password: string): Promise<AuthSuccess> {
 		let response: AuthSuccess = {
 			validData: true,
@@ -110,6 +115,26 @@ export default class Authenticator {
 		if (matches.length < 1)
 			return false;
 		return matches[0].password === password;
+	}
+
+	public async getUserId(username: string): Promise<string> {
+		const user = await this.findUser(username);
+		if (user._id == undefined)
+			return "-1";
+		return user._id;
+	}
+
+	public async findUser(username: string): Promise<ILogin> {
+		return new Promise<ILogin> ((inResolve, inReject) => {
+			this.db.findOne({ username: username }, 
+                (inError: Error | null, inDocs: ILogin) => {
+                    if (inError)
+                        inReject(inError);
+                    else
+                        inResolve(inDocs);
+                }
+			);
+		});
 	}
 
 	public async find(obj: {}): Promise<ILogin[]> {

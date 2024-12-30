@@ -16,6 +16,7 @@ body {
 @import url("frontpage.css");
 @import url("profileButton.css");
 @import url("login.css");
+@import url("add-match.css");
 
 /* The buttons in the confirmation popup */
 .confirmationButtons {
@@ -24,6 +25,7 @@ body {
 	justify-content: center;
 	align-items: center;
 }
+
 /* the title of each page */
 .page-title {
 	color: var(--main-text-color);

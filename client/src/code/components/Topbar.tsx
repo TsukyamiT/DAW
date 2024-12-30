@@ -23,7 +23,7 @@ const Topbar = () => (
 
 			}} />
 			<TopbarButton text="Add Match" onClick={() => {
-
+				State.navigate("/add-match");
 			}} />
 		</div>
 		<div className="topbar-right">

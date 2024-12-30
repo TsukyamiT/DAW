@@ -14,11 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const path_1 = __importDefault(require("path"));
 const express_1 = __importDefault(require("express"));
-// import * as Game_list from "./game-list";
-// import { IGame_list } from "./game-list";
-// import * as Game_Player_list from "./game-player-list";
-// import { IGame_Player_list } from "./game-player-list";
 const auth_1 = __importDefault(require("./auth"));
+const profiles_1 = __importDefault(require("./profiles"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use(express_1.default.static(path_1.default.join(__dirname, "../../client/dist")));
@@ -38,6 +35,12 @@ app.post('/api/register', (req, res) => __awaiter(void 0, void 0, void 0, functi
     const registerStatus = yield auth.register(req.body);
     res.json(registerStatus);
 }));
+app.get("/api/profile/:username", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const profiles = new profiles_1.default();
+    const profile = yield profiles.getProfile(req.params.username);
+    res.json(profile);
+}));
+// client routing
 app.get('/*', (req, res) => {
     res.sendFile(path_1.default.join(__dirname, "../../client/dist/index.html"));
 });

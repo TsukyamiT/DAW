@@ -8,11 +8,12 @@ import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 
 // App imports.
+import State from "./stateController";
 import FrontPage from "./endpoints/FrontPage";
 import Leaderboard from "./endpoints/Leaderboard";
 import Login from "./endpoints/Login";
 import Register from "./endpoints/Register";
-import State from "./stateController";
+import AddMatch from "./endpoints/AddMatch";
 
 const SetupNavigator = () => {
 	State.setNavigator(useNavigate());
@@ -27,6 +28,7 @@ ReactDOM.render(
 			<Route path="/leaderboard" element={<Leaderboard />} />
 			<Route path="/login" element={<Login />} />
 			<Route path="/register" element={<Register />} />
+			<Route path="/add-match" element={<AddMatch />} />
 		</Routes>
 	</Router>,
 	document.body

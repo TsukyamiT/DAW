@@ -1,10 +1,11 @@
 import { Component } from "react";
 import Authenticator from "./auth";
-import pfpDefault from "../images/pfp_default.jpg";
+import defaultPfp from "../images/pfp_default.jpg";
 
 export type ConfirmationCallback = (result: boolean) => void;
 
 export enum Game {
+	none,
 	ggst,
 	lol,
 	ow,
@@ -40,9 +41,12 @@ export abstract class State {
 	private static _currentGame = Game.ggst;
 
 	// user attributes
+	private static readonly defaultPassword = "";
+	private static readonly defaultUsername = "SIGN UP";
 	private static _isSignedIn = false;
-	private static _username = "SIGN UP";
-	private static _profilePicture = pfpDefault;
+	private static _username = this.defaultUsername;
+	private static _password = this.defaultPassword;
+	private static _profilePicture = defaultPfp;
 
 	// profile button widget
 	private static _isShowingProfileButtonWidget = false;
@@ -153,8 +157,16 @@ export abstract class State {
 		return this._username;
 	}
 
+	public static getPassword(): string {
+		return this._password;
+	}
+
 	public static isSignedIn(): boolean {
 		return this._isSignedIn;
+	}
+
+	public static isLoggedIn(): boolean {
+		return this.isSignedIn();
 	}
 
 	public static toggleProfileButtonWidget(): void {
@@ -162,8 +174,32 @@ export abstract class State {
 		this.update();
 	}
 
+	public static turnOffButtonWidget(): void {
+		if (!this._isShowingProfileButtonWidget)
+			return;
+		this.toggleProfileButtonWidget();
+	}
+
 	public static isShowingProfileButtonWidget(): boolean {
 		return this._isShowingProfileButtonWidget;
+	}
+
+	public static login(username: string, password: string, img: string | null) {
+		this._isSignedIn = true;
+		this._username = username;
+		this._password = password;
+		if (img == null)
+			img = defaultPfp;
+		this._profilePicture = img;
+		this.update();
+	}
+
+	public static logout() {
+		this._isSignedIn = false;
+		this._username = this.defaultUsername;
+		this._password = this.defaultPassword;
+		this._profilePicture = defaultPfp;
+		this.update();
 	}
 }
 

@@ -10,6 +10,13 @@ const lightInputTheme = (outerTheme: Theme) => createTheme({
 		mode: outerTheme.palette.mode,
 	},
 	components: {
+		MuiSelect: {
+			styleOverrides: {
+				select: {
+					color: '#E0E3E7',
+				}
+			}
+		},
 		MuiTextField: {
 			styleOverrides: {
 				root: {
@@ -21,7 +28,7 @@ const lightInputTheme = (outerTheme: Theme) => createTheme({
 					},
 					'& label': {
 						color: 'var(--TextField-brandBorderColor)',
-					}
+					},
 				},
 			},
 		},

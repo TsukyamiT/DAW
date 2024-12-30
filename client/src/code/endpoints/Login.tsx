@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 
 import State from "../stateController";
 import Authenticator from "../auth";
@@ -14,6 +14,20 @@ class Login extends Component {
 
 	currUsername = "";
 	currPassword = "";
+
+	handleKeyPress = (event: any) => {
+		if (event.key === "Enter" && !State.isShowingInfo()) {
+			Authenticator.login(this.currUsername, this.currPassword);
+		}
+	}
+
+	componentDidMount() {
+		document.addEventListener('keydown', this.handleKeyPress);
+	}
+
+	componentWillUnmount() {
+		document.removeEventListener('keydown', this.handleKeyPress);
+	}
 
 	render() {
 		return (

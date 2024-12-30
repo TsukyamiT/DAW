@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { config } from "./config";
 import State from "./stateController";
+import Profiles from "./profiles";
 
 export type AuthSuccess = {
 	success: boolean,
@@ -90,6 +91,7 @@ export class AuthErrors {
 
 export default class Authenticator {
 	public static async login(username: string, password: string): Promise<void> {
+		State.setLoading(true);
 		if (!this.validate(username, password))
 			return;
 
@@ -97,6 +99,13 @@ export default class Authenticator {
 
 		if (responseSuccess.success)
 		{
+			const profile = await Profiles.getProfile(username);
+			let picture: string | null;
+			if (profile == null)
+				picture = null;
+			else
+				picture = profile.picture;
+			State.login(username, password, picture);
 			State.navigate("/leaderboard");
 			State.showInfo("Login", "SUCCESS!");
 		}
@@ -111,6 +120,7 @@ export default class Authenticator {
 				msg += "wrong password!"
 			State.showInfo("Login", msg);
 		}
+		State.setLoading(false);
 	}
 
 	private static validate(username: string, password: string): boolean {
@@ -151,6 +161,7 @@ export default class Authenticator {
 	}
 
 	public static async register(username: string, password: string): Promise<void> {
+		State.setLoading(true);
 		if (!this.validate(username, password))
 			return;
 
@@ -158,7 +169,7 @@ export default class Authenticator {
 
 		if (responseSuccess.success)
 		{
-			State.navigate("/leaderboard");
+			State.navigate("/login");
 			State.showInfo("Register", "SUCCESS!");
 		}
 		else
@@ -172,6 +183,7 @@ export default class Authenticator {
 				msg += "you should not be seeing this error (invalid state)"
 			State.showInfo("Register", msg);
 		}
+		State.setLoading(false);
 	}
 
 	private static async attemptRegister(username: string, password: string): Promise<AuthSuccess> {
@@ -184,7 +196,7 @@ export default class Authenticator {
 			const responseSuccess: AuthSuccess = response.data;
 			return responseSuccess;
 		} catch (error) {
-			console.error("error logging in: " + error);
+			console.error("error registering: " + error);
 		}
 	}
 }
