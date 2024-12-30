@@ -16,6 +16,7 @@ const path_1 = __importDefault(require("path"));
 const express_1 = __importDefault(require("express"));
 const auth_1 = __importDefault(require("./auth"));
 const profiles_1 = __importDefault(require("./profiles"));
+const matches_1 = __importDefault(require("./matches"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use(express_1.default.static(path_1.default.join(__dirname, "../../client/dist")));
@@ -34,6 +35,11 @@ app.post('/api/register', (req, res) => __awaiter(void 0, void 0, void 0, functi
     const auth = new auth_1.default();
     const registerStatus = yield auth.register(req.body);
     res.json(registerStatus);
+}));
+app.post('/api/add-match', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const matches = new matches_1.default();
+    const matchAddStatus = yield matches.add(req.body);
+    res.json(matchAddStatus);
 }));
 app.get("/api/profile/:username", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const profiles = new profiles_1.default();

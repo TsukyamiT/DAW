@@ -5,8 +5,10 @@ import Authenticator, { ILogin } from "./auth";
 
 export interface IProfile {
 	_id?: string,
-	picture: string,
-	description: string,
+	userid: string,
+	picture?: string,
+	description?: string,
+	rating?: number,
 }
 
 export default class Profiles {
@@ -24,13 +26,13 @@ export default class Profiles {
 		const id: string = await auth.getUserId(username);
 		const profile: IProfile = await this.find({ _id: id });
 		const updated = await this.update(
-			{ _id: id },
-			{ _id: id, picture: picture, description: profile.description});
+			{ userid: id },
+			{ picture: picture });
 		if (!updated)
 			console.error("couldn't update profile.");
 	}
 
-	public async getPicture(username: string): Promise<string> {
+	public async getPicture(username: string): Promise<string | undefined> {
 		const profile: IProfile = await this.getProfile(username);
 		return profile.picture;
 	}
@@ -40,6 +42,28 @@ export default class Profiles {
 		const id: string = await auth.getUserId(username);
 		const profile: IProfile = await this.find({ _id: id });
 		return profile;
+	}
+
+	public async setRating(username: string, rating: number): Promise<void> {
+		const auth = new Authenticator();
+		const id: string = await auth.getUserId(username);
+		const profile: IProfile = await this.find({ _id: id });
+		const updated = await this.update(
+			{ userid: id },
+			{ rating: rating });
+		if (!updated)
+			console.error("couldn't update profile.");
+	}
+
+	public async setDesc(username: string, desc: string): Promise<void> {
+		const auth = new Authenticator();
+		const id: string = await auth.getUserId(username);
+		const profile: IProfile = await this.find({ _id: id });
+		const updated = await this.update(
+			{ userid: id },
+			{ description: desc });
+		if (!updated)
+			console.error("couldn't update profile.");
 	}
 
 	private async find(obj: {}): Promise<IProfile> {

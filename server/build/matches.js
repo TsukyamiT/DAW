@@ -45,84 +45,98 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Game = exports.Result = void 0;
 const path = __importStar(require("path"));
 const nedb_1 = __importDefault(require("nedb"));
 const auth_1 = __importDefault(require("./auth"));
-class Profiles {
+const profiles_1 = __importDefault(require("./profiles"));
+var Result;
+(function (Result) {
+    Result[Result["none"] = 0] = "none";
+    Result[Result["win"] = 1] = "win";
+    Result[Result["loss"] = 2] = "loss";
+    Result[Result["draw"] = 3] = "draw";
+})(Result || (exports.Result = Result = {}));
+var Game;
+(function (Game) {
+    Game[Game["none"] = 0] = "none";
+    Game[Game["ggst"] = 1] = "ggst";
+    Game[Game["lol"] = 2] = "lol";
+    Game[Game["ow"] = 3] = "ow";
+    Game[Game["cs"] = 4] = "cs";
+    Game[Game["rl"] = 5] = "rl";
+    Game[Game["val"] = 6] = "val";
+})(Game || (exports.Game = Game = {}));
+class Matches {
     constructor() {
         this.db = new nedb_1.default({
-            filename: path.join(__dirname, "profiles.db"),
+            filename: path.join(__dirname, "matches.db"),
             autoload: true
         });
     }
-    setPicture(username, picture) {
+    add(match) {
         return __awaiter(this, void 0, void 0, function* () {
             const auth = new auth_1.default();
-            const id = yield auth.getUserId(username);
-            const profile = yield this.find({ _id: id });
-            const updated = yield this.update({ userid: id }, { picture: picture });
-            if (!updated)
-                console.error("couldn't update profile.");
+            let result = {
+                success: true,
+                validLogin: true,
+                validData: true,
+            };
+            // check login
+            if (!(yield auth.validLogin(match.username, match.password))) {
+                result.success = false;
+                result.validLogin = false;
+            }
+            // check data
+            const tenMinutes = Date.now() - 600000;
+            match.date = new Date(match.date); // fixes weird bug
+            if (match.result === Result.none ||
+                match.game === Game.none ||
+                match.rating < 0 ||
+                match.date.getTime() < tenMinutes ||
+                match.date.getTime() > Date.now()) {
+                result.success = false;
+                result.validData = false;
+            }
+            if (result.success) {
+                result.success = yield this.forceAdd(match);
+                const profiles = new profiles_1.default();
+                yield profiles.setRating(match.username, match.rating);
+            }
+            return result;
         });
     }
-    getPicture(username) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const profile = yield this.getProfile(username);
-            return profile.picture;
-        });
-    }
-    getProfile(username) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const auth = new auth_1.default();
-            const id = yield auth.getUserId(username);
-            const profile = yield this.find({ _id: id });
-            return profile;
-        });
-    }
-    setRating(username, rating) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const auth = new auth_1.default();
-            const id = yield auth.getUserId(username);
-            const profile = yield this.find({ _id: id });
-            const updated = yield this.update({ userid: id }, { rating: rating });
-            if (!updated)
-                console.error("couldn't update profile.");
-        });
-    }
-    setDesc(username, desc) {
+    forceAdd(match) {
         return __awaiter(this, void 0, void 0, function* () {
             const auth = new auth_1.default();
-            const id = yield auth.getUserId(username);
-            const profile = yield this.find({ _id: id });
-            const updated = yield this.update({ userid: id }, { description: desc });
-            if (!updated)
-                console.error("couldn't update profile.");
+            let matchEntry = {
+                userid: yield auth.getUserId(match.username),
+                date: match.date,
+                result: match.result,
+                game: match.game,
+                rating: match.rating,
+            };
+            try {
+                yield this.addDb(matchEntry);
+            }
+            catch (error) {
+                console.error(error);
+                return false;
+            }
+            return true;
         });
     }
-    find(obj) {
+    addDb(obj) {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((inResolve, inReject) => {
-                this.db.findOne(obj, (inError, inDocs) => {
+                this.db.insert(obj, (inError, inNewDoc) => {
                     if (inError)
                         inReject(inError);
                     else
-                        inResolve(inDocs);
-                });
-            });
-        });
-    }
-    update(obj, updatedObj) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const options = { upsert: true };
-            return new Promise((inResolve, inReject) => {
-                this.db.update(obj, updatedObj, options, (inError, numUpdated, upsert) => {
-                    if (inError)
-                        inReject(inError);
-                    else
-                        inResolve(numUpdated > 0);
+                        inResolve(inNewDoc);
                 });
             });
         });
     }
 }
-exports.default = Profiles;
+exports.default = Matches;

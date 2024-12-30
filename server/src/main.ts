@@ -3,6 +3,7 @@ import express, { Express, NextFunction, Request, Response } from "express";
 
 import Authenticator, { ILogin } from "./auth";
 import Profiles from "./profiles";
+import Matches from "./matches";
 
 const app : Express = express();
 
@@ -27,6 +28,12 @@ app.post('/api/register', async (req, res) => {
 	const auth = new Authenticator();
 	const registerStatus = await auth.register(req.body);
 	res.json(registerStatus);
+});
+
+app.post('/api/add-match', async (req, res) => {
+	const matches = new Matches();
+	const matchAddStatus = await matches.add(req.body);
+	res.json(matchAddStatus);
 });
 
 app.get("/api/profile/:username", async (req, res) => {
