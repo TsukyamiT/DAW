@@ -19,6 +19,7 @@ body {
 @import url("login.css");
 @import url("add-match.css");
 @import url("leaderboard.css");
+@import url("profile.css");
 
 /* The buttons in the confirmation popup */
 .confirmationButtons {

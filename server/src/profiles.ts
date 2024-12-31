@@ -22,6 +22,20 @@ export default class Profiles {
         });
 	}
 
+	public async createProfile(username: string) {
+		const auth = new Authenticator();
+		const id: string = await auth.getUserId(username);
+		if (!(await this.exists(id)))
+			await this.add({ userid: id, username: username});
+	}
+
+	public async exists(userid: string) {
+		const profile: IProfile = await this.find({ userid: userid });
+		if (profile === undefined || profile === null || profile.userid === undefined)
+			return false;
+		return true;
+	}
+
 	public async setPicture(username: string, picture: string): Promise<void> {
 		const auth = new Authenticator();
 		const id: string = await auth.getUserId(username);
@@ -40,7 +54,10 @@ export default class Profiles {
 	public async getProfile(username: string): Promise<IProfile> {
 		const auth = new Authenticator();
 		const id: string = await auth.getUserId(username);
-		const profile: IProfile = await this.find({ _id: id });
+		if (id !== "-1") {
+			await this.createProfile(username);
+		}
+		const profile: IProfile = await this.find({ userid: id });
 		return profile;
 	}
 
@@ -76,6 +93,19 @@ export default class Profiles {
 						inReject(inError);
 					else
 						inResolve(numUpdated > 0);
+				}
+			);
+		});
+	}
+
+	public async add(obj: IProfile): Promise<IProfile> {
+        return new Promise((inResolve, inReject) => {
+			this.db.insert(obj,
+				(inError: Error | null, inNewDoc: IProfile) => {
+					if (inError)
+						inReject(inError);
+					else
+						inResolve(inNewDoc);
 				}
 			);
 		});

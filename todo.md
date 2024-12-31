@@ -40,7 +40,9 @@
 - update profile database
 - send profile success
 
-# No page, page
+# No page, page (Missing Page)
+- copy About page
+- type "this page doesn't exist :("
 
 # BUGS
 - inserting text into input box and then deleting it and submitting

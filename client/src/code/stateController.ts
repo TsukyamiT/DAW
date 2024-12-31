@@ -1,6 +1,7 @@
 import { Component } from "react";
 import Authenticator from "./auth";
 import defaultPfp from "../images/pfp_default.jpg";
+import { IProfile } from "./profiles";
 
 export type ConfirmationCallback = (result: boolean) => void;
 
@@ -54,6 +55,9 @@ export abstract class State {
 	// leaderboard
 	private static _leaderboardPage = 0;
 	private static _leaderboardRowsPerPage = 100;
+
+	// profile page
+	private static _viewProfile: IProfile;
 
 	// --------------------------------------------------------
 	// METHODS
@@ -224,6 +228,19 @@ export abstract class State {
 	public static setLeaderboardRowsPerPage(value: number) {
 		this._leaderboardRowsPerPage = value;
 		this.update();
+	}
+
+	public static setViewProfile(value: IProfile) {
+		this._viewProfile = value;
+		this.update();
+	}
+
+	public static getViewProfile() {
+		return this._viewProfile;
+	}
+
+	public static getDefaultProfilePicture() {
+		return defaultPfp;
 	}
 }
 

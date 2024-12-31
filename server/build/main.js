@@ -42,7 +42,12 @@ app.post('/api/login', (req, res) => __awaiter(void 0, void 0, void 0, function*
 app.post('/api/register', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const auth = new auth_1.default();
-        const registerStatus = yield auth.register(req.body);
+        const login = req.body;
+        const registerStatus = yield auth.register(login);
+        if (registerStatus.success) {
+            const profiles = new profiles_1.default();
+            profiles.createProfile(login.username);
+        }
         res.json(registerStatus);
     }
     catch (error) {

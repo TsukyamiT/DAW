@@ -12,16 +12,16 @@ class Leaderboard extends Component {
 		State.setBaseComponent(this)
 	}
 
-	profiles: IPlayerRating[] = [];
+	ratings: IPlayerRating[] = [];
 
 	async componentDidMount() {
 		try {
 			State.setLoading(true);
-			this.profiles = await PlayerRatings.getGameRatings(State.currentGame());
+			this.ratings = await PlayerRatings.getGameRatings(State.currentGame());
 			State.setLoading(false);
 		} catch (error) {
-			console.error("could not get profiles.");
-			this.profiles = [];
+			console.error("could not get ratings.");
+			this.ratings = [];
 			State.setLoading(false);
 		}
 	}
@@ -32,7 +32,7 @@ class Leaderboard extends Component {
 				<Page title="Leaderboard" />
 				<div className="leaderboard-area">
 					<div className="leaderboard-table">
-						<LeaderboardTable ratings={this.profiles} />
+						<LeaderboardTable ratings={this.ratings} />
 					</div>
 				</div>
 			</div>

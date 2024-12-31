@@ -19,6 +19,7 @@ import About from "./endpoints/About";
 import Stats from "./endpoints/Stats";
 import Find from "./endpoints/Find";
 import Profile from "./endpoints/Profile";
+import UnknownPage from "./endpoints/UnknownPage";
 
 const SetupNavigator = () => {
 	State.setNavigator(useNavigate());
@@ -40,7 +41,7 @@ ReactDOM.render(
 			<Route path="/stats" element={<Stats />} />
 			<Route path="/find" element={<Find />} />
 			<Route path="/profile/:username" element={<Profile />} />
-			<Route path="/*" element={<Find />} />
+			<Route path="/*" element={<UnknownPage />} />
 		</Routes>
 	</BrowserRouter>,
 	document.body

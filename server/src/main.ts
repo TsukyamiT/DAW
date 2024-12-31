@@ -1,7 +1,7 @@
 import path from "path";
 import express, { Express, NextFunction, Request, Response } from "express";
 
-import Authenticator, { ILogin } from "./auth";
+import Authenticator, { ILogin, LoginData } from "./auth";
 import Profiles, { IProfile } from "./profiles";
 import Matches, { Game, MatchData } from "./matches";
 import PlayerRatings from "./ratings";
@@ -34,7 +34,12 @@ app.post('/api/login', async (req, res) => {
 app.post('/api/register', async (req, res) => {
 	try {
 		const auth = new Authenticator();
-		const registerStatus = await auth.register(req.body);
+		const login: LoginData = req.body;
+		const registerStatus = await auth.register(login);
+		if (registerStatus.success) {
+			const profiles = new Profiles();
+			profiles.createProfile(login.username);
+		}
 		res.json(registerStatus);
 	} catch (error) {
 		console.error("error on registering: " + error);

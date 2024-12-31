@@ -36,7 +36,7 @@ const ProfileButtonWidget = () => (
 				color="primary"
 				size="large"
 				onClick={() => {
-
+					State.navigate("/profile/" + State.getUsername());
 				}}>
 				<Typography variant="h6">
 					PROFILE

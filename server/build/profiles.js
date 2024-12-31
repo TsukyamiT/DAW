@@ -55,6 +55,22 @@ class Profiles {
             autoload: true
         });
     }
+    createProfile(username) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const auth = new auth_1.default();
+            const id = yield auth.getUserId(username);
+            if (!(yield this.exists(id)))
+                yield this.add({ userid: id, username: username });
+        });
+    }
+    exists(userid) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const profile = yield this.find({ userid: userid });
+            if (profile === undefined || profile === null || profile.userid === undefined)
+                return false;
+            return true;
+        });
+    }
     setPicture(username, picture) {
         return __awaiter(this, void 0, void 0, function* () {
             const auth = new auth_1.default();
@@ -74,7 +90,12 @@ class Profiles {
         return __awaiter(this, void 0, void 0, function* () {
             const auth = new auth_1.default();
             const id = yield auth.getUserId(username);
-            const profile = yield this.find({ _id: id });
+            if (id !== "-1") {
+                this.createProfile(username);
+            }
+            console.log("user id: " + id);
+            const profile = yield this.find({ userid: id });
+            console.log("profile: " + profile);
             return profile;
         });
     }
@@ -108,6 +129,18 @@ class Profiles {
                         inReject(inError);
                     else
                         inResolve(numUpdated > 0);
+                });
+            });
+        });
+    }
+    add(obj) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return new Promise((inResolve, inReject) => {
+                this.db.insert(obj, (inError, inNewDoc) => {
+                    if (inError)
+                        inReject(inError);
+                    else
+                        inResolve(inNewDoc);
                 });
             });
         });
