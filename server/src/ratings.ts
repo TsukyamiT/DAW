@@ -37,6 +37,7 @@ export default class PlayerRatings {
 	public async setRating(username: string, game: Game, rating: number): Promise<void> {
 		const auth = new Authenticator();
 		const id = await auth.getUserId(username);
+		console.log("updating rating");
 		const updated = await this.update(
 			{ userid: id, game: game },
 			{ userid: id, rating: rating, game: game, username: username });

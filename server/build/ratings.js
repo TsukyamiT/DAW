@@ -73,6 +73,7 @@ class PlayerRatings {
         return __awaiter(this, void 0, void 0, function* () {
             const auth = new auth_1.default();
             const id = yield auth.getUserId(username);
+            console.log("updating rating");
             const updated = yield this.update({ userid: id, game: game }, { userid: id, rating: rating, game: game, username: username });
             if (!updated)
                 console.error("couldn't update rating.");

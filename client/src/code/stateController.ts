@@ -2,6 +2,7 @@ import { Component } from "react";
 import Authenticator from "./auth";
 import defaultPfp from "../images/pfp_default.jpg";
 import Profiles, { IProfile } from "./profiles";
+import { IMatch } from "./matches";
 
 export type ConfirmationCallback = (result: boolean) => void;
 
@@ -59,6 +60,10 @@ export abstract class State {
 
 	// profile page
 	private static _viewProfile: IProfile;
+	private static _matchesPage = 0;
+	private static _matchesRowsPerPage = 10;
+	private static _playerMatches: IMatch[] = [];
+	public static lastMatchProfileUsernameViewed = "";
 
 	// edit profile persistant variables. Need to be reset on naviationResetables
 	public static editUsername = "";
@@ -83,10 +88,17 @@ export abstract class State {
 	// stuff that needs to be reset upon navigating
 	public static navigationResetables()
 	{
+		// general
 		this._isShowingProfileButtonWidget = false;
+		this._viewProfile = undefined;
+
+		// profile
+		this._matchesPage = 0;
+		this._matchesRowsPerPage = 10;
+
+		// leaderbaord
 		this._leaderboardPage = 0;
 		this._leaderboardRowsPerPage = 100;
-		this._viewProfile = undefined;
 			
 		// edit profile resets
 		this.setupEditProfileVars();
@@ -342,6 +354,33 @@ export abstract class State {
 
 	public static setSearchRowsPerPage(value: number) {
 		this._searchRowsPerPage = value;
+	}
+
+	public static getMatchesPage() {
+		return this._matchesPage;
+	}
+
+	public static getMatchesRowsPerPage() {
+		return this._matchesRowsPerPage;
+	}
+
+	public static setMatchesPage(value: number) {
+		this._matchesPage = value;
+		this.update();
+	}
+
+	public static setMatchesRowsPerPage(value: number) {
+		this._matchesRowsPerPage = value;
+		this.update();
+	}
+
+	public static getPlayerMatches() {
+		return this._playerMatches;
+	}
+
+	public static setPlayerMatches(value: IMatch[]) {
+		State._playerMatches = value;
+		State.update();
 	}
 }
 

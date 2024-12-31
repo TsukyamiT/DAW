@@ -86,13 +86,13 @@ const ProfilesTable = ({profiles}: {profiles: IProfile[]}) => {
 			<ThemeProvider theme={darkTheme}>
 				<Paper elevation={3}>
 					<TableContainer>
-						<Table sx={{ minWidth: 0 }} size="small" aria-label="leaderboard-table">
+						<Table sx={{ minWidth: 0 }} size="small" aria-label="players-table">
 							<TableHead>
 								<TableRow>
 									<TableCell align="center">Player</TableCell>
 								</TableRow>
 							</TableHead>
-							<ProfileEntries profiles={profiles} page={State.getLeaderboardPage()} rowsPerPage={State.getLeaderboardRowsPerPage()}/>
+							<ProfileEntries profiles={profiles} page={State.getSearchPage()} rowsPerPage={State.getSearchRowsPerPage()}/>
 						</Table>
 					</TableContainer>
 					<TablePagination

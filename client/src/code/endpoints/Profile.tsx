@@ -11,6 +11,10 @@ import Button from "@mui/material/Button";
 import BaseLayout from "../components/BaseLayout";
 import UnknownPage from "./UnknownPage";
 import LightUnknownPage from "../components/LightUnknownPage";
+import ProfilesTable from "../components/ProfilesTable";
+import MatchesTable from "../components/MatchesTable";
+import Matches, { IMatch } from "../matches";
+import PageTitle from "../components/PageTitle";
 
 const routerParam = () => {
 	const { username } = useParams();
@@ -127,6 +131,14 @@ class Profile extends Component<ProfileProps> {
 			return(<LightUnknownPage />);
 		}
 
+		if (
+			State.getViewProfile() !== undefined &&
+			State.getViewProfile().username !== undefined &&
+			State.lastMatchProfileUsernameViewed !== State.getViewProfile().username) {
+			State.lastMatchProfileUsernameViewed = State.getViewProfile().username;
+			Matches.getPlayerMatches(State.getViewProfile().username).then(State.setPlayerMatches);
+		}
+
 		return (
 			<div className="profile">
 				<BaseLayout />
@@ -148,6 +160,13 @@ class Profile extends Component<ProfileProps> {
 				<div className="profile-first-line">
 					<EditButton />
 					<RemoveButton />
+				</div>
+
+				<PageTitle title="Matches" />
+				<div className="profile-matches-area">
+					<div className="profile-matches-table">
+						<MatchesTable matches={State.getPlayerMatches()} />
+					</div>
 				</div>
 			</div>
 		);

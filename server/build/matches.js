@@ -110,6 +110,13 @@ class Matches {
             return yield this.find({});
         });
     }
+    getPlayerMatches(username) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const auth = new auth_1.default();
+            const id = yield auth.getUserId(username);
+            return yield this.find({ userid: id });
+        });
+    }
     forceAdd(match) {
         return __awaiter(this, void 0, void 0, function* () {
             const auth = new auth_1.default();

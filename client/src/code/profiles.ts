@@ -80,7 +80,7 @@ export default class Profiles {
 	public static async getMatchingProfiles(regex: string): Promise<IProfile[]> {
 		State.setLoading(true);
 		try {
-			const response: AxiosResponse = await axios.get(`${config.serverAddress}/api/matches/profiles/${regex}`);
+			const response: AxiosResponse = await axios.get(`${config.serverAddress}/api/find/profiles/${regex}`);
 			const profiles: IProfile[] = response.data;
 			console.log("got " + profiles.length + " matches");
 			State.setLoading(false);

@@ -172,11 +172,21 @@ app.get("/api/profiles", async (req, res) => {
 	}
 })
 
-app.get("/api/matches/profiles/:regex", async (req, res) => {
+app.get("/api/find/profiles/:regex", async (req, res) => {
 	try {
 		const profiles = new Profiles();
 		const allProfiles: IProfile[] = await profiles.getMatchingUsername(req.params.regex);
 		res.json(allProfiles);
+	} catch (error) {
+		console.error("error on getting player ratings: " + error);
+	}
+})
+
+app.get("/api/matches/:username", async (req, res) => {
+	try {
+		const matches = new Matches();
+		const playerMatches: IMatch[] = await matches.getPlayerMatches(req.params.username);
+		res.json(playerMatches);
 	} catch (error) {
 		console.error("error on getting player ratings: " + error);
 	}

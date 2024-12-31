@@ -32,9 +32,7 @@ const Info = () => {
 				<DialogTitle style={{ textAlign:"center" }}>{ State.infoTitle() }</DialogTitle>
 				<DialogContent>
 					<DialogContentText>
-						<Typography variant="body1" style={{whiteSpace: 'pre-line'}}>
-							{ State.infoContents() }
-						</Typography>
+						{ State.infoContents() }
 					</DialogContentText>
 				</DialogContent>
 				<Button

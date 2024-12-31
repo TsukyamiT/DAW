@@ -20,7 +20,7 @@ export default class Find extends Component {
 
 
 	handleKeyPress = async (event: any) => {
-		if (event.key === "Enter" && !State.isShowingInfo()) {
+		if (event.key === "Enter" && !State.isShowingInfo() && this.searchUsername.length > 0) {
 			State.setSearchedProfiles(await Profiles.getMatchingProfiles(this.searchUsername));
 		}
 	}

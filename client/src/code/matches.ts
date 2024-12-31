@@ -131,9 +131,19 @@ export default class Matches {
 			State.setLoading(false);
 			return matches;
 		} catch (error) {
-			console.error("error getting profile: " + error);
+			console.error("error getting matches: " + error);
 			State.setLoading(false);
 		}
 		State.setLoading(false);
+	}
+
+	public static async getPlayerMatches(username: string): Promise<IMatch[]> {
+		try {
+			const response: AxiosResponse = await axios.get(`${config.serverAddress}/api/matches/${username}`);
+			const matches: IMatch[] = response.data;
+			return matches;
+		} catch (error) {
+			console.error("error getting player matches: " + error);
+		}
 	}
 }

@@ -96,6 +96,12 @@ export default class Matches {
 		return await this.find({});
 	}
 
+	public async getPlayerMatches(username: string): Promise<IMatch[]> {
+		const auth = new Authenticator();
+		const id = await auth.getUserId(username);
+		return await this.find({ userid: id });
+	}
+
 	public async forceAdd(match: MatchData): Promise<boolean> {
 		const auth = new Authenticator();
 		let matchEntry: IMatch = {

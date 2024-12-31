@@ -44,3 +44,14 @@
 	gap: 20px;
 	padding-right: 50px;
 }
+
+.profile-matches-area {
+	display: flex;
+	justify-content: center;
+	padding-bottom: 75px;
+	width: 100%;
+}
+
+.profile-matches-table {
+	width: 80%;
+}
