@@ -69,6 +69,29 @@ app.post('/api/add-match', (req, res) => __awaiter(void 0, void 0, void 0, funct
         console.error("error on adding match: " + error);
     }
 }));
+app.delete('/api/delete/profile', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const matches = new matches_1.default();
+        const auth = new auth_1.default();
+        const profiles = new profiles_1.default();
+        const ratings = new ratings_1.default();
+        const login = req.body;
+        if (yield auth.validLogin(login.username, login.password)) {
+            yield matches.deleteAll(login.username);
+            yield profiles.deleteUser(login.username);
+            yield ratings.deleteUser(login.username);
+            yield auth.deleteUser(login.username); // needs to be last, holds user id
+            res.json(true);
+        }
+        else {
+            res.json(false);
+        }
+    }
+    catch (error) {
+        console.error("error on removing profile: " + error);
+        res.json(false);
+    }
+}));
 app.get("/api/profile/:username", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const profiles = new profiles_1.default();

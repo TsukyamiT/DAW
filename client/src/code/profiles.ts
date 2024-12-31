@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { config } from "./config";
 import State, { Game } from "./stateController";
+import { LoginData } from "./auth";
 
 export interface IProfile {
 	_id?: string,
@@ -32,6 +33,23 @@ export default class Profiles {
 			return profile;
 		} catch (error) {
 			console.error("error getting profile: " + error);
+			State.setLoading(false);
+		}
+	}
+
+	public static async delete(username: string, password: string): Promise<boolean> {
+		State.setLoading(true);
+		try {
+			const login: LoginData = {
+				username: username,
+				password: password,
+			}
+			const response: AxiosResponse = await axios.delete(`${config.serverAddress}/api/delete/profile`, { data: login } );
+			const success: boolean = response.data;
+			State.setLoading(false);
+			return success
+		} catch (error) {
+			console.error("error deleting profile: " + error);
 			State.setLoading(false);
 		}
 	}

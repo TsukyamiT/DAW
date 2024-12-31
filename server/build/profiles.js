@@ -91,11 +91,9 @@ class Profiles {
             const auth = new auth_1.default();
             const id = yield auth.getUserId(username);
             if (id !== "-1") {
-                this.createProfile(username);
+                yield this.createProfile(username);
             }
-            console.log("user id: " + id);
             const profile = yield this.find({ userid: id });
-            console.log("profile: " + profile);
             return profile;
         });
     }
@@ -106,6 +104,13 @@ class Profiles {
             const updated = yield this.update({ userid: id }, { userid: id, description: desc });
             if (!updated)
                 console.error("couldn't update profile.");
+        });
+    }
+    deleteUser(username) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const auth = new auth_1.default();
+            const userid = yield auth.getUserId(username);
+            yield this.delete({ userid: userid });
         });
     }
     find(obj) {
@@ -129,6 +134,18 @@ class Profiles {
                         inReject(inError);
                     else
                         inResolve(numUpdated > 0);
+                });
+            });
+        });
+    }
+    delete(obj) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return new Promise((inResolve, inReject) => {
+                this.db.remove(obj, (inError, n) => {
+                    if (inError)
+                        inReject(inError);
+                    else
+                        inResolve(n);
                 });
             });
         });

@@ -153,6 +153,23 @@ class Authenticator {
             });
         });
     }
+    deleteUser(username) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.delete({ username: username });
+        });
+    }
+    delete(obj) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return new Promise((inResolve, inReject) => {
+                this.db.remove(obj, (inError, n) => {
+                    if (inError)
+                        inReject(inError);
+                    else
+                        inResolve(n);
+                });
+            });
+        });
+    }
     find(obj) {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((inResolve, inReject) => {

@@ -137,6 +137,23 @@ export default class Authenticator {
 		});
 	}
 
+	public async deleteUser(username: string) {
+		await this.delete({ username: username });
+	}
+
+	public async delete(obj: {}): Promise<number> {
+		return new Promise<number> ((inResolve, inReject) => {
+			this.db.remove(obj, 
+                (inError: Error | null, n: number) => {
+                    if (inError)
+                        inReject(inError);
+                    else
+                        inResolve(n);
+                }
+			);
+		});
+	}
+
 	public async find(obj: {}): Promise<ILogin[]> {
 		return new Promise<ILogin[]> ((inResolve, inReject) => {
 			this.db.find(obj, 

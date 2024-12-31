@@ -38,6 +38,9 @@
 }
 
 .profile-first-line {
-	width: 100%;
-	text-align: center;
+	display: flex;
+	width: calc(100% - 50);
+	justify-content: right;
+	gap: 20px;
+	padding-right: 50px;
 }

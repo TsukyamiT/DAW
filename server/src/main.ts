@@ -61,6 +61,29 @@ app.post('/api/add-match', async (req, res) => {
 	}
 });
 
+app.delete('/api/delete/profile', async (req, res) => {
+	try {
+		const matches = new Matches();
+		const auth = new Authenticator();
+		const profiles = new Profiles();
+		const ratings = new PlayerRatings();
+
+		const login: LoginData = req.body;
+		if (await auth.validLogin(login.username, login.password)) {
+			await matches.deleteAll(login.username);
+			await profiles.deleteUser(login.username);
+			await ratings.deleteUser(login.username);
+			await auth.deleteUser(login.username); // needs to be last, holds user id
+			res.json(true);
+		} else {
+			res.json(false);
+		}
+	} catch (error) {
+		console.error("error on removing profile: " + error);
+		res.json(false);
+	}
+})
+
 app.get("/api/profile/:username", async (req, res) => {
 	try {
 		const profiles = new Profiles();

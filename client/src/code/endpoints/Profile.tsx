@@ -8,6 +8,8 @@ import Typography from "@mui/material/Typography";
 import Topbar from "../components/Topbar";
 import { useParams, Params } from "react-router-dom";
 import Button from "@mui/material/Button";
+import BaseLayout from "../components/BaseLayout";
+import UnknownPage from "./UnknownPage";
 
 const routerParam = () => {
 	const { username } = useParams();
@@ -53,8 +55,37 @@ const Description = () => {
 	);
 }
 
+function isMyProfile(): boolean {
+	return State.isLoggedIn() && State.getViewProfile().username === State.getUsername();
+}
+
+async function onRemove(choice: boolean) {
+	if (choice) {
+		if (await Profiles.delete(State.getUsername(), State.getPassword())) {
+			State.showInfo("Profile Deletion", "SUCCESS!");
+			State.logout();
+			State.navigate("/leaderboard");
+		} else {
+			State.showInfo("Profile Deletion", "ERROR REMOVING");
+		}
+	}
+}
+
+const RemoveButton = () => {
+	if (isMyProfile()) {
+		return (
+			<Button variant="contained" color="error" onClick={() => {
+				State.showConfirmation("Are you sure you want to delete your account?", onRemove);
+			}}>
+				DELETE ACCOUNT
+			</Button>
+		);
+	}
+	return (null);
+}
+
 const EditButton = () => {
-	if (State.isLoggedIn() && State.getViewProfile().username === State.getUsername()) {
+	if (isMyProfile()) {
 		return (
 			<Button variant="contained" onClick={() => {
 				State.navigate("/edit");
@@ -85,10 +116,13 @@ class Profile extends Component<ProfileProps> {
 
 	render() {
 		const { username } = this.props;
-		if (State.getViewProfile() === undefined)
-			return(null);
+		if (State.getViewProfile() === undefined || State.getViewProfile === null)
+			return(
+				<UnknownPage />
+			);
 		return (
 			<div className="profile">
+				<BaseLayout />
 				<Topbar />
 				<div className="profile-main">
 					<div className="profile-main-logo">
@@ -106,6 +140,7 @@ class Profile extends Component<ProfileProps> {
 
 				<div className="profile-first-line">
 					<EditButton />
+					<RemoveButton />
 				</div>
 			</div>
 		);

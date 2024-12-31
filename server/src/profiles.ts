@@ -71,6 +71,12 @@ export default class Profiles {
 			console.error("couldn't update profile.");
 	}
 
+	public async deleteUser(username: string) {
+		const auth = new Authenticator();
+		const userid = await auth.getUserId(username);
+		await this.delete({ userid: userid });
+	}
+
 	private async find(obj: {}): Promise<IProfile> {
 		return new Promise<IProfile> ((inResolve, inReject) => {
 			this.db.findOne(obj, 
@@ -97,6 +103,20 @@ export default class Profiles {
 			);
 		});
 	}
+
+	public async delete(obj: {}): Promise<number> {
+		return new Promise<number> ((inResolve, inReject) => {
+			this.db.remove(obj, 
+                (inError: Error | null, n: number) => {
+                    if (inError)
+                        inReject(inError);
+                    else
+                        inResolve(n);
+                }
+			);
+		});
+	}
+
 
 	public async add(obj: IProfile): Promise<IProfile> {
         return new Promise((inResolve, inReject) => {

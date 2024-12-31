@@ -44,6 +44,25 @@ export default class PlayerRatings {
 			console.error("couldn't update profile.");
 	}
 
+	public async deleteUser(username: string) {
+		const auth = new Authenticator();
+		const userid = await auth.getUserId(username);
+		await this.delete({ userid: userid });
+	}
+
+	public async delete(obj: {}): Promise<number> {
+		return new Promise<number> ((inResolve, inReject) => {
+			this.db.remove(obj, 
+                (inError: Error | null, n: number) => {
+                    if (inError)
+                        inReject(inError);
+                    else
+                        inResolve(n);
+                }
+			);
+		});
+	}
+
 	private async find(obj: {}): Promise<IPlayerRating[]> {
 		return new Promise<IPlayerRating[]> ((inResolve, inReject) => {
 			this.db.find(obj, 

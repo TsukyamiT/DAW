@@ -111,6 +111,26 @@ export default class Matches {
 		return true;
 	}
 
+	public async deleteAll(username: string) {
+		const auth = new Authenticator();
+		const userid = await auth.getUserId(username);
+		await this.delete({ userid: userid });
+	}
+
+	public async delete(obj: {}): Promise<number> {
+		return new Promise<number> ((inResolve, inReject) => {
+			this.db.remove(obj, 
+                (inError: Error | null, n: number) => {
+                    if (inError)
+                        inReject(inError);
+                    else
+                        inResolve(n);
+                }
+			);
+		});
+	}
+
+
 	public async addDb(obj: IMatch): Promise<IMatch> {
         return new Promise((inResolve, inReject) => {
 			this.db.insert(obj,

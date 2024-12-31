@@ -1,13 +1,15 @@
-{"userid":"k5KyIYzPJQXF37yR","date":{"$$date":1735588417113},"result":3,"game":1,"rating":970,"_id":"1LcnOL1y5f2IcbCD"}
 {"userid":"6lKpAnOGylNnyeCD","date":{"$$date":1735588227382},"result":1,"game":1,"rating":1989,"_id":"53Ap7omHxNjORL92"}
 {"userid":"JL12SeGGe3cWuLxM","date":{"$$date":1735584885922},"result":1,"game":1,"rating":1200,"_id":"DUhlqfRytntinUYO"}
 {"userid":"reQBh4T0tG5Qzuj2","date":{"$$date":1735588179104},"result":1,"game":1,"rating":1420,"_id":"EaTZgkawzNDV3A7s"}
 {"userid":"UK47Bql3QF6Hjz5p","date":{"$$date":1735584847447},"result":1,"game":1,"rating":1000,"_id":"GmdTp8R27F7mMXaQ"}
 {"userid":"MMU6QmkyMOdKvZKo","date":{"$$date":1735588355952},"result":2,"game":1,"rating":1444,"_id":"H5u6fSOJZKHZyOjn"}
 {"userid":"UK47Bql3QF6Hjz5p","date":{"$$date":1735587284763},"result":2,"game":3,"rating":2785,"_id":"IkvAxN18JqMqnm0L"}
+{"userid":"EDMTRFddH4KopQgF","date":{"$$date":1735638422528},"result":3,"game":1,"rating":1200,"_id":"KTqh5P6KuTcjWfao"}
+{"userid":"y1gpTlI7aSELlWqR","date":{"$$date":1735638349391},"result":3,"game":1,"rating":1500,"_id":"KwtoIppzRp4UB5rh"}
 {"userid":"bRl5rIQC1xHFN8lt","date":{"$$date":1735588104829},"result":1,"game":1,"rating":1500,"_id":"Mn9xaXfs11Fqkqcs"}
+{"userid":"GkwIgQNpTMLqNHdM","date":{"$$date":1735588594040},"result":1,"game":1,"rating":1698,"_id":"MuNW8eF8vbmfvjiS"}
 {"userid":"2OF6UwRqSZw9SGaw","date":{"$$date":1735584923098},"result":3,"game":1,"rating":1150,"_id":"TFZEbNQoYuTgHUJz"}
 {"userid":"MRz4o4TsmZdTeyag","date":{"$$date":1735588321709},"result":2,"game":1,"rating":1672,"_id":"V2RFsiClnSTXG7Zl"}
 {"userid":"zFGwURm9jwkPKPfy","date":{"$$date":1735588070493},"result":1,"game":1,"rating":1423,"_id":"bp2TlzycDxqLk8BI"}
 {"userid":"MMU6QmkyMOdKvZKo","date":{"$$date":1735588362441},"result":1,"game":1,"rating":1455,"_id":"hLOzbeZG9GEZxW6V"}
-{"userid":"GkwIgQNpTMLqNHdM","date":{"$$date":1735588594040},"result":1,"game":1,"rating":1698,"_id":"MuNW8eF8vbmfvjiS"}
+{"$$deleted":true,"_id":"KTqh5P6KuTcjWfao"}
