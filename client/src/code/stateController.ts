@@ -71,6 +71,11 @@ export abstract class State {
 	private static _numberOfPlayers = 0;
 	private static _numberOfMatches = 0;
 
+	// search page
+	private static _searchedProfiles: IProfile[] = [];
+	private static _searchPage = 0;
+	private static _searchRowsPerPage = 100;
+
 	// --------------------------------------------------------
 	// METHODS
 	// --------------------------------------------------------
@@ -89,6 +94,11 @@ export abstract class State {
 		// stats screen
 		this._numberOfPlayers = 0;
 		this._numberOfMatches = 0;
+
+		// search page
+		this._searchedProfiles = [];
+		this._searchPage = 0;
+		this._searchRowsPerPage = 100;
 	}
 
 	public static setBaseComponent(component: Component) {
@@ -309,6 +319,30 @@ export abstract class State {
 		return this._numberOfMatches;
 	}
 
+	public static setSearchedProfiles(value: IProfile[]) {
+		this._searchedProfiles = value;
+		this.update();
+	}
+
+	public static getSearchedProfiles() {
+		return this._searchedProfiles;
+	}
+
+	public static getSearchPage() {
+		return this._searchPage;
+	}
+
+	public static getSearchRowsPerPage() {
+		return this._searchRowsPerPage;
+	}
+
+	public static setSearchPage(value: number) {
+		this._searchPage = value;
+	}
+
+	public static setSearchRowsPerPage(value: number) {
+		this._searchRowsPerPage = value;
+	}
 }
 
 export default State

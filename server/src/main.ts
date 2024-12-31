@@ -172,6 +172,16 @@ app.get("/api/profiles", async (req, res) => {
 	}
 })
 
+app.get("/api/matches/profiles/:regex", async (req, res) => {
+	try {
+		const profiles = new Profiles();
+		const allProfiles: IProfile[] = await profiles.getMatchingUsername(req.params.regex);
+		res.json(allProfiles);
+	} catch (error) {
+		console.error("error on getting player ratings: " + error);
+	}
+})
+
 
 
 

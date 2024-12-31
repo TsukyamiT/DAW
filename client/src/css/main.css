@@ -21,6 +21,7 @@ body {
 @import url("leaderboard.css");
 @import url("profile.css");
 @import url("edit-profile.css");
+@import url("search.css");
 
 /* The buttons in the confirmation popup */
 .confirmationButtons {

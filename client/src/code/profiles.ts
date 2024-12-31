@@ -77,6 +77,21 @@ export default class Profiles {
 		State.setLoading(false);
 	}
 
+	public static async getMatchingProfiles(regex: string): Promise<IProfile[]> {
+		State.setLoading(true);
+		try {
+			const response: AxiosResponse = await axios.get(`${config.serverAddress}/api/matches/profiles/${regex}`);
+			const profiles: IProfile[] = response.data;
+			console.log("got " + profiles.length + " matches");
+			State.setLoading(false);
+			return profiles;
+		} catch (error) {
+			console.error("error getting profile: " + error);
+			State.setLoading(false);
+		}
+		State.setLoading(false);
+	}
+
 	public static async update(profileUpdateRequest: ProfileUpdateRequest): Promise<AuthSuccess> {
 		State.setLoading(true);
 		try {

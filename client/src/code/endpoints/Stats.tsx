@@ -23,10 +23,10 @@ export default class About extends Component {
 		return (
 			<div className="about">
 				<Page title="Stats" />
-				<Typography variant="h5" className="about-text" align="left" padding="0px">
+				<Typography variant="h5" className="about-text">
 					Total number of players: {State.getNumberOfPlayers()}
 				</Typography>
-				<Typography variant="h5" className="about-text" align="left" padding="0px">
+				<Typography variant="h5" className="about-text">
 					Total number of matches: {State.getNumberOfMatches()}
 				</Typography>
 			</div>

@@ -181,6 +181,16 @@ app.get("/api/profiles", (req, res) => __awaiter(void 0, void 0, void 0, functio
         console.error("error on getting player ratings: " + error);
     }
 }));
+app.get("/api/matches/profiles/:regex", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const profiles = new profiles_1.default();
+        const allProfiles = yield profiles.getMatchingUsername(req.params.regex);
+        res.json(allProfiles);
+    }
+    catch (error) {
+        console.error("error on getting player ratings: " + error);
+    }
+}));
 // client routing
 app.get('*', (req, res) => {
     res.sendFile(path_1.default.join(__dirname, "../../client/dist/index.html"));

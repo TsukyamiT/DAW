@@ -74,6 +74,11 @@ export default class Profiles {
 		return await this.findAll({});
 	}
 
+	public async getMatchingUsername(regex: string): Promise<IProfile[]> {
+		const profiles: IProfile[] = await this.findMatchingUsernames(regex);
+		return profiles;
+	}
+
 	public async setDesc(username: string, desc: string): Promise<void> {
 		const auth = new Authenticator();
 		const id: string = await auth.getUserId(username);
@@ -101,6 +106,19 @@ export default class Profiles {
 		const auth = new Authenticator();
 		const userid = await auth.getUserId(username);
 		await this.delete({ userid: userid });
+	}
+
+	private async findMatchingUsernames(regex: string): Promise<IProfile[]> {
+		return new Promise<IProfile[]> ((inResolve, inReject) => {
+			this.db.find({ username: { $regex: new RegExp(regex, 'i') }}, 
+                (inError: Error | null, inDocs: IProfile[]) => {
+                    if (inError)
+                        inReject(inError);
+                    else
+                        inResolve(inDocs);
+                }
+			);
+		});
 	}
 
 	private async findAll(obj: {}): Promise<IProfile[]> {

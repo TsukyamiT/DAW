@@ -102,6 +102,12 @@ class Profiles {
             return yield this.findAll({});
         });
     }
+    getMatchingUsername(regex) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const profiles = yield this.findMatchingUsernames(regex);
+            return profiles;
+        });
+    }
     setDesc(username, desc) {
         return __awaiter(this, void 0, void 0, function* () {
             const auth = new auth_1.default();
@@ -130,6 +136,18 @@ class Profiles {
             const auth = new auth_1.default();
             const userid = yield auth.getUserId(username);
             yield this.delete({ userid: userid });
+        });
+    }
+    findMatchingUsernames(regex) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return new Promise((inResolve, inReject) => {
+                this.db.find({ username: { $regex: new RegExp(regex, 'i') } }, (inError, inDocs) => {
+                    if (inError)
+                        inReject(inError);
+                    else
+                        inResolve(inDocs);
+                });
+            });
         });
     }
     findAll(obj) {
