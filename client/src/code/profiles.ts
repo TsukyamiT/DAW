@@ -54,9 +54,22 @@ export default class Profiles {
 		try {
 			const response: AxiosResponse = await axios.get(`${config.serverAddress}/api/profile/${username}`);
 			const profile: IProfile = response.data;
-			console.log("getting profile with picture: " + profile.encodedPicture);
 			State.setLoading(false);
 			return profile;
+		} catch (error) {
+			console.error("error getting profile: " + error);
+			State.setLoading(false);
+		}
+		State.setLoading(false);
+	}
+
+	public static async getAllProfiles(): Promise<IProfile[]> {
+		State.setLoading(true);
+		try {
+			const response: AxiosResponse = await axios.get(`${config.serverAddress}/api/profiles`);
+			const profiles: IProfile[] = response.data;
+			State.setLoading(false);
+			return profiles;
 		} catch (error) {
 			console.error("error getting profile: " + error);
 			State.setLoading(false);
@@ -68,13 +81,6 @@ export default class Profiles {
 		State.setLoading(true);
 		try {
 			console.log(profileUpdateRequest.newPicture);
-			// let formData = new FormData();
-			// formData.append('oldUsername', profileUpdateRequest.login.username);
-			// formData.append('oldPassword', profileUpdateRequest.login.password);
-			// formData.append('newUsername', profileUpdateRequest.newUsername);
-			// formData.append('newPassword', profileUpdateRequest.newPassword);
-			// formData.append('newDescription', profileUpdateRequest.newDescription);
-			// formData.append('newPicture', profileUpdateRequest.newPicture);
 			const response: AxiosResponse = await axios.post(`${config.serverAddress}/api/update-profile/`, profileUpdateRequest);
 			const success: AuthSuccess = response.data;
 			State.setLoading(false);

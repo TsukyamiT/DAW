@@ -67,6 +67,10 @@ export abstract class State {
 	public static editImageFile: File;
 	public static editImage = State.getDefaultProfilePicture();
 
+	// stats page
+	private static _numberOfPlayers = 0;
+	private static _numberOfMatches = 0;
+
 	// --------------------------------------------------------
 	// METHODS
 	// --------------------------------------------------------
@@ -81,6 +85,10 @@ export abstract class State {
 			
 		// edit profile resets
 		this.setupEditProfileVars();
+
+		// stats screen
+		this._numberOfPlayers = 0;
+		this._numberOfMatches = 0;
 	}
 
 	public static setBaseComponent(component: Component) {
@@ -282,6 +290,25 @@ export abstract class State {
 	public static getDefaultProfilePicture() {
 		return defaultPfp;
 	}
+
+	public static setNumberOfPlayers(value: number) {
+		this._numberOfPlayers = value;
+		this.update();
+	}
+
+	public static getNumberOfPlayers() {
+		return this._numberOfPlayers;
+	}
+
+	public static setNumberOfMatches(value: number) {
+		this._numberOfMatches = value;
+		this.update();
+	}
+
+	public static getNumberOfMatches() {
+		return this._numberOfMatches;
+	}
+
 }
 
 export default State

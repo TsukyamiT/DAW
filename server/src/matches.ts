@@ -92,6 +92,10 @@ export default class Matches {
 		return result;
 	}
 
+	public async getAllMatches(): Promise<IMatch[]> {
+		return await this.find({});
+	}
+
 	public async forceAdd(match: MatchData): Promise<boolean> {
 		const auth = new Authenticator();
 		let matchEntry: IMatch = {
@@ -111,10 +115,24 @@ export default class Matches {
 		return true;
 	}
 
+
 	public async deleteAll(username: string) {
 		const auth = new Authenticator();
 		const userid = await auth.getUserId(username);
 		await this.delete({ userid: userid });
+	}
+
+	private async find(obj: {}): Promise<IMatch[]> {
+		return new Promise<IMatch[]> ((inResolve, inReject) => {
+			this.db.find(obj, 
+                (inError: Error | null, inDocs: IMatch[]) => {
+                    if (inError)
+                        inReject(inError);
+                    else
+                        inResolve(inDocs);
+                }
+			);
+		});
 	}
 
 	public async delete(obj: {}): Promise<number> {

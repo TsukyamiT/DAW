@@ -123,4 +123,17 @@ export default class Matches {
 		return /^\d+$/.test(str);
 	}
 
+	public static async getAllMatches(): Promise<IMatch[]> {
+		State.setLoading(true);
+		try {
+			const response: AxiosResponse = await axios.get(`${config.serverAddress}/api/matches`);
+			const matches: IMatch[] = response.data;
+			State.setLoading(false);
+			return matches;
+		} catch (error) {
+			console.error("error getting profile: " + error);
+			State.setLoading(false);
+		}
+		State.setLoading(false);
+	}
 }

@@ -3,7 +3,7 @@ import express, { Express, NextFunction, Request, Response } from "express";
 
 import Authenticator, { AuthSuccess, ILogin, LoginData } from "./auth";
 import Profiles, { IProfile, ProfileUpdateRequest } from "./profiles";
-import Matches, { Game, MatchData } from "./matches";
+import Matches, { Game, IMatch, MatchData } from "./matches";
 import PlayerRatings from "./ratings";
 
 const app : Express = express();
@@ -147,6 +147,26 @@ app.get("/api/ratings/player/:username", async (req, res) => {
 		const ratings = new PlayerRatings();
 		const rating: IProfile[] = await ratings.getPlayerRatings(req.params.username);
 		res.json(rating);
+	} catch (error) {
+		console.error("error on getting player ratings: " + error);
+	}
+})
+
+app.get("/api/matches", async (req, res) => {
+	try {
+		const matches = new Matches();
+		const allMatches: IMatch[] = await matches.getAllMatches();
+		res.json(allMatches);
+	} catch (error) {
+		console.error("error on getting player ratings: " + error);
+	}
+})
+
+app.get("/api/profiles", async (req, res) => {
+	try {
+		const profiles = new Profiles();
+		const allProfiles: IProfile[] = await profiles.getAllProfiles();
+		res.json(allProfiles);
 	} catch (error) {
 		console.error("error on getting player ratings: " + error);
 	}

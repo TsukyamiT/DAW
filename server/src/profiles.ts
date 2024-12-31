@@ -70,6 +70,10 @@ export default class Profiles {
 		return profile;
 	}
 
+	public async getAllProfiles(): Promise<IProfile[]> {
+		return await this.findAll({});
+	}
+
 	public async setDesc(username: string, desc: string): Promise<void> {
 		const auth = new Authenticator();
 		const id: string = await auth.getUserId(username);
@@ -97,6 +101,19 @@ export default class Profiles {
 		const auth = new Authenticator();
 		const userid = await auth.getUserId(username);
 		await this.delete({ userid: userid });
+	}
+
+	private async findAll(obj: {}): Promise<IProfile[]> {
+		return new Promise<IProfile[]> ((inResolve, inReject) => {
+			this.db.find(obj, 
+                (inError: Error | null, inDocs: IProfile[]) => {
+                    if (inError)
+                        inReject(inError);
+                    else
+                        inResolve(inDocs);
+                }
+			);
+		});
 	}
 
 	private async find(obj: {}): Promise<IProfile> {

@@ -105,6 +105,11 @@ class Matches {
             return result;
         });
     }
+    getAllMatches() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.find({});
+        });
+    }
     forceAdd(match) {
         return __awaiter(this, void 0, void 0, function* () {
             const auth = new auth_1.default();
@@ -130,6 +135,18 @@ class Matches {
             const auth = new auth_1.default();
             const userid = yield auth.getUserId(username);
             yield this.delete({ userid: userid });
+        });
+    }
+    find(obj) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return new Promise((inResolve, inReject) => {
+                this.db.find(obj, (inError, inDocs) => {
+                    if (inError)
+                        inReject(inError);
+                    else
+                        inResolve(inDocs);
+                });
+            });
         });
     }
     delete(obj) {
