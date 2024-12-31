@@ -1,0 +1,29 @@
+.edit-profile {
+	margin-bottom: 50px;
+	text-align: center;
+}
+
+.edit-input {
+}
+
+.pfp-input-exterior {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+.pfp-input {
+	display: flex;
+	aspect-ratio: 1 / 1;
+	width: 30%;
+	/* justify-content: center; */
+	align-items: center;
+	flex-direction: column;
+}
+
+.profile-picture-input-image {
+	width: 30%;
+	border-radius: 50%;
+	aspect-ratio: 1 / 1;
+	padding: 20px;
+}

@@ -1,16 +1,17 @@
 import path from "path";
 import express, { Express, NextFunction, Request, Response } from "express";
 
-import Authenticator, { ILogin, LoginData } from "./auth";
-import Profiles, { IProfile } from "./profiles";
+import Authenticator, { AuthSuccess, ILogin, LoginData } from "./auth";
+import Profiles, { IProfile, ProfileUpdateRequest } from "./profiles";
 import Matches, { Game, MatchData } from "./matches";
 import PlayerRatings from "./ratings";
 
 const app : Express = express();
 
-app.use(express.json());
+app.use(express.json({limit: '50mb'}));
 
 app.use(express.static(path.join(__dirname, "../../client/dist")))
+
 
 // cors
 app.use(function(inRequest: Request, inResponse: Response, inNext: NextFunction){
@@ -56,6 +57,43 @@ app.post('/api/add-match', async (req, res) => {
 			ratings.setRating(match.username, match.game, match.rating);
 		}
 		res.json(matchAddStatus);
+	} catch (error) {
+		console.error("error on adding match: " + error);
+	}
+});
+
+app.post('/api/update-profile', async (req, res) => {
+	try {
+		const auth = new Authenticator();
+		const profileUpdateRequest: ProfileUpdateRequest = req.body;
+		const authSuccess = await auth.login(profileUpdateRequest.login);
+		if (!authSuccess.success) {
+			res.json(authSuccess);
+		} else {
+			const newUsername = profileUpdateRequest.newUsername === undefined ?
+				profileUpdateRequest.login.username : profileUpdateRequest.newUsername;
+			const newPassword = profileUpdateRequest.newPassword === undefined ?
+				profileUpdateRequest.login.password : profileUpdateRequest.newPassword;
+			const newLogin: LoginData = {
+				username: newUsername,
+				password: newPassword,
+			}
+			const updateAuthSuccess = await auth.updateUser(profileUpdateRequest.login, newLogin);
+			if (!updateAuthSuccess.success) {
+				res.json(updateAuthSuccess);
+			} else {
+				const profiles = new Profiles();
+				const ratings = new PlayerRatings();
+				await ratings.updateUsername(profileUpdateRequest.login.username, newUsername);
+				const profileUpdateSuccess: boolean = await profiles.updateProfile(profileUpdateRequest);
+				const success: AuthSuccess = {
+					success: profileUpdateSuccess,
+					usernameExists: false,
+					validData: true,
+				};
+				res.json (success);
+			}
+		}
 	} catch (error) {
 		console.error("error on adding match: " + error);
 	}

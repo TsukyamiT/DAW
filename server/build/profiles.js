@@ -71,21 +71,20 @@ class Profiles {
             return true;
         });
     }
-    setPicture(username, picture) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const auth = new auth_1.default();
-            const id = yield auth.getUserId(username);
-            const updated = yield this.update({ userid: id }, { userid: id, picture: picture });
-            if (!updated)
-                console.error("couldn't update profile.");
-        });
-    }
-    getPicture(username) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const profile = yield this.getProfile(username);
-            return profile.picture;
-        });
-    }
+    // public async setPicture(username: string, picture: string): Promise<void> {
+    // 	const auth = new Authenticator();
+    // 	const id: string = await auth.getUserId(username);
+    // 	const updated = await this.update(
+    // 		{ userid: id },
+    // 		{ userid: id, picture: picture });
+    // 	if (!updated)
+    // 		console.error("couldn't update profile.");
+    // }
+    //
+    // public async getPicture(username: string): Promise<File | undefined> {
+    // 	const profile: IProfile = await this.getProfile(username);
+    // 	return profile.picture;
+    // }
     getProfile(username) {
         return __awaiter(this, void 0, void 0, function* () {
             const auth = new auth_1.default();
@@ -94,6 +93,7 @@ class Profiles {
                 yield this.createProfile(username);
             }
             const profile = yield this.find({ userid: id });
+            console.log("profile: " + profile.username);
             return profile;
         });
     }
@@ -104,6 +104,20 @@ class Profiles {
             const updated = yield this.update({ userid: id }, { userid: id, description: desc });
             if (!updated)
                 console.error("couldn't update profile.");
+        });
+    }
+    updateProfile(request) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const auth = new auth_1.default();
+            const username = request.newUsername === undefined ?
+                request.login.username : request.newUsername; // ALREADY CHANGED USERNAME
+            const id = yield auth.getUserId(username);
+            return yield this.update({ userid: id }, {
+                userid: id,
+                description: request.newDescription,
+                encodedPicture: request.newPicture,
+                username: username,
+            });
         });
     }
     deleteUser(username) {

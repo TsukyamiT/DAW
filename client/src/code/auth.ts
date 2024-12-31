@@ -92,19 +92,21 @@ export class AuthErrors {
 export default class Authenticator {
 	public static async login(username: string, password: string): Promise<void> {
 		State.setLoading(true);
-		if (!this.validate(username, password))
+		if (!this.validate(username, password)) {
+			State.setLoading(false);
 			return;
+		}
 
 		const responseSuccess = await this.attemptLogin(username, password);
 
 		if (responseSuccess.success)
 		{
 			const profile = await Profiles.getProfile(username);
-			let picture: string | null;
+			let picture: File | null;
 			if (profile == null)
 				picture = null;
 			else
-				picture = profile.picture;
+				picture = Profiles.decodeFile(profile.encodedPicture);
 			State.login(username, password, picture);
 			State.navigate("/leaderboard");
 			State.showInfo("Login", "SUCCESS!");
@@ -123,7 +125,7 @@ export default class Authenticator {
 		State.setLoading(false);
 	}
 
-	private static validate(username: string, password: string): boolean {
+	public static validate(username: string, password: string): boolean {
 		let errors = new AuthErrors;
 		errors.validateUsername(username);
 		errors.validatePassword(password);

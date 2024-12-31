@@ -1,7 +1,7 @@
 import { Component } from "react";
 import Authenticator from "./auth";
 import defaultPfp from "../images/pfp_default.jpg";
-import { IProfile } from "./profiles";
+import Profiles, { IProfile } from "./profiles";
 
 export type ConfirmationCallback = (result: boolean) => void;
 
@@ -47,7 +47,8 @@ export abstract class State {
 	private static _isSignedIn = false;
 	private static _username = this.defaultUsername;
 	private static _password = this.defaultPassword;
-	private static _profilePicture = defaultPfp;
+	private static _profilePicture: File;
+	private static _profilePictureURL: string = defaultPfp;
 
 	// profile button widget
 	private static _isShowingProfileButtonWidget = false;
@@ -59,9 +60,28 @@ export abstract class State {
 	// profile page
 	private static _viewProfile: IProfile;
 
+	// edit profile persistant variables. Need to be reset on naviationResetables
+	public static editUsername = "";
+	public static editPassword = "";
+	public static editDescription = "";
+	public static editImageFile: File;
+	public static editImage = State.getDefaultProfilePicture();
+
 	// --------------------------------------------------------
 	// METHODS
 	// --------------------------------------------------------
+
+	// stuff that needs to be reset upon navigating
+	public static navigationResetables()
+	{
+		this._isShowingProfileButtonWidget = false;
+		this._leaderboardPage = 0;
+		this._leaderboardRowsPerPage = 100;
+		this._viewProfile = undefined;
+			
+		// edit profile resets
+		this.setupEditProfileVars();
+	}
 
 	public static setBaseComponent(component: Component) {
 		this._baseComponent = component
@@ -74,14 +94,6 @@ export abstract class State {
 	public static navigate(endpoint: string) {
 		this.navigationResetables();
 		this._navigator(endpoint);
-	}
-
-	// stuff that needs to be reset upon navigating
-	public static navigationResetables()
-	{
-		this._isShowingProfileButtonWidget = false;
-		this._leaderboardPage = 0;
-		this._leaderboardRowsPerPage = 100;
 	}
 
 	public static setLoading(value: boolean): void {
@@ -160,7 +172,7 @@ export abstract class State {
 	}
 
 	public static getProfilePicture(): string {
-		return this._profilePicture;
+		return this._profilePictureURL;
 	}
 
 	public static getUsername(): string {
@@ -194,13 +206,17 @@ export abstract class State {
 		return this._isShowingProfileButtonWidget;
 	}
 
-	public static login(username: string, password: string, img: string | null) {
+	public static login(username: string, password: string, img: File | null) {
 		this._isSignedIn = true;
 		this._username = username;
 		this._password = password;
-		if (img == null)
-			img = defaultPfp;
-		this._profilePicture = img;
+		if (img == null || img === undefined) {
+			this._profilePictureURL = defaultPfp;
+		} else {
+			this._profilePicture = img;
+			if (img)
+				this._profilePictureURL = URL.createObjectURL(img);
+		}
 		this.update();
 	}
 
@@ -208,7 +224,8 @@ export abstract class State {
 		this._isSignedIn = false;
 		this._username = this.defaultUsername;
 		this._password = this.defaultPassword;
-		this._profilePicture = defaultPfp;
+		this._profilePictureURL = defaultPfp;
+		this._profilePicture = undefined;
 		this.update();
 	}
 
@@ -232,7 +249,30 @@ export abstract class State {
 
 	public static setViewProfile(value: IProfile) {
 		this._viewProfile = value;
+		this.setupEditProfileVars();
 		this.update();
+	}
+
+	public static setupEditProfileVars() {
+		if (State.getViewProfile() !== undefined && State.getViewProfile() !== null) {
+			this.editUsername = State.getViewProfile().username;
+			this.editPassword = State.getPassword();
+			this.editDescription = State.getViewProfile().description;
+			// this.editImageFile = State.getViewProfile().picture;
+			if (State.getViewProfile().encodedPicture !== undefined &&
+				State.getViewProfile().encodedPicture !== null) {
+				this.editImageFile = Profiles.decodeFile(State.getViewProfile().encodedPicture);
+				console.log(State.getViewProfile().encodedPicture);
+				this.editImage = URL.createObjectURL(this.editImageFile);
+			}
+		}
+		else {
+			this.editUsername = "";
+			this.editPassword = "";
+			this.editDescription = "";
+			this.editImageFile = undefined;
+			this.editImage = State.getDefaultProfilePicture();
+		}
 	}
 
 	public static getViewProfile() {

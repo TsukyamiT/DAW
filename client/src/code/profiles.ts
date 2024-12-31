@@ -1,36 +1,84 @@
 import axios, { AxiosResponse } from "axios";
 import { config } from "./config";
 import State, { Game } from "./stateController";
-import { LoginData } from "./auth";
+import { AuthSuccess, LoginData } from "./auth";
+import fs from "fs";
 
 export interface IProfile {
 	_id?: string,
 	userid: string,
 	username?: string,
-	picture?: string,
+	encodedPicture?: string,
 	description?: string,
-	rating?: number,
 }
 
-export type ProfileData = {
-	username: string,
-	password: string,
-	picture?: string,
-	description?: string,
-	rating?: number,
-
+export type ProfileUpdateRequest = {
+	login: LoginData,
 	newUsername?: string,
 	newPassword?: string,
+	newPicture?: string,
+	newDescription?: string,
 }
 
 export default class Profiles {
+	public static async encodeFile(file: File): Promise<string> {
+		return new Promise((resolve, reject) => {
+			const reader = new FileReader();
+			reader.onloadend = () => {
+				resolve(reader.result as string);
+			}
+			reader.onerror = reject;
+			reader.readAsDataURL(file);
+		});
+	}
+
+	public static decodeFile(baseString: string): File {
+		if (baseString === undefined)
+			return undefined;
+		const baseData = baseString.split(',')[1];
+		const binaryString = atob(baseData);
+		const byteArray = new Uint8Array(binaryString.length);
+		for (let i = 0; i < binaryString.length; i++) {
+			byteArray[i] = binaryString.charCodeAt(i);
+		}
+
+		const filename = "image.png";
+		const mimeType = "image/png";
+		const blob = new Blob([byteArray], { type: mimeType, })
+		const file = new File([blob], filename, { type: mimeType });
+		return file;
+	}
+
 	public static async getProfile(username: string): Promise<IProfile> {
 		State.setLoading(true);
 		try {
 			const response: AxiosResponse = await axios.get(`${config.serverAddress}/api/profile/${username}`);
 			const profile: IProfile = response.data;
+			console.log("getting profile with picture: " + profile.encodedPicture);
 			State.setLoading(false);
 			return profile;
+		} catch (error) {
+			console.error("error getting profile: " + error);
+			State.setLoading(false);
+		}
+		State.setLoading(false);
+	}
+
+	public static async update(profileUpdateRequest: ProfileUpdateRequest): Promise<AuthSuccess> {
+		State.setLoading(true);
+		try {
+			console.log(profileUpdateRequest.newPicture);
+			// let formData = new FormData();
+			// formData.append('oldUsername', profileUpdateRequest.login.username);
+			// formData.append('oldPassword', profileUpdateRequest.login.password);
+			// formData.append('newUsername', profileUpdateRequest.newUsername);
+			// formData.append('newPassword', profileUpdateRequest.newPassword);
+			// formData.append('newDescription', profileUpdateRequest.newDescription);
+			// formData.append('newPicture', profileUpdateRequest.newPicture);
+			const response: AxiosResponse = await axios.post(`${config.serverAddress}/api/update-profile/`, profileUpdateRequest);
+			const success: AuthSuccess = response.data;
+			State.setLoading(false);
+			return success;
 		} catch (error) {
 			console.error("error getting profile: " + error);
 			State.setLoading(false);
@@ -47,7 +95,7 @@ export default class Profiles {
 			const response: AxiosResponse = await axios.delete(`${config.serverAddress}/api/delete/profile`, { data: login } );
 			const success: boolean = response.data;
 			State.setLoading(false);
-			return success
+			return success;
 		} catch (error) {
 			console.error("error deleting profile: " + error);
 			State.setLoading(false);

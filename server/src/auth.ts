@@ -137,6 +137,40 @@ export default class Authenticator {
 		});
 	}
 
+	public async validate(username: string, password: string): Promise<AuthSuccess> {
+		let response: AuthSuccess = {
+			validData: true,
+			usernameExists: true,
+			success: true,
+		};
+
+		response.validData = this.usernameValid(username) && this.passwordValid(password);
+		response.usernameExists = response.validData ? await this.usernameExists(username) : false;
+		response.success = response.validData && !response.usernameExists;
+
+		return response;
+	}
+
+	public async updateUser(oldLogin: LoginData, newLogin: LoginData): Promise<AuthSuccess> {
+		const success = await this.validate(newLogin.username, newLogin.password);
+		if (success.validData && success.usernameExists && oldLogin.username === newLogin.username) {
+			// user didn't change username but it will trigger the "username already exists"
+			success.usernameExists = false;
+			success.success = true;
+		}
+		const id = this.getUserId(oldLogin.username);
+		if (success.success) {
+			const updated = await this.update(
+				{ username: oldLogin.username },
+				{ username: newLogin.username, password: newLogin.password });
+			if (!updated) {
+				success.success = false;
+				console.error("couldn't update auth.");
+			}
+		}
+		return success;
+	}
+
 	public async deleteUser(username: string) {
 		await this.delete({ username: username });
 	}
@@ -150,6 +184,20 @@ export default class Authenticator {
                     else
                         inResolve(n);
                 }
+			);
+		});
+	}
+
+	public async update(obj: {}, updatedObj: {}): Promise<boolean> {
+		const options: Nedb.UpdateOptions = { upsert: true }
+        return new Promise((inResolve, inReject) => {
+			this.db.update(obj, updatedObj, options, 
+				(inError: Error | null, numUpdated: number, upsert: boolean) => {
+					if (inError)
+						inReject(inError);
+					else
+						inResolve(numUpdated > 0);
+				}
 			);
 		});
 	}

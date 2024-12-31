@@ -1,15 +1,23 @@
 import * as path from "path";
 import Datastore from "nedb";
 
-import Authenticator, { ILogin } from "./auth";
+import Authenticator, { AuthSuccess, ILogin, LoginData } from "./auth";
 import { Game } from "./matches";
 
 export interface IProfile {
 	_id?: string,
 	userid: string,
 	username?: string // WARNING: username is actually saved in the auth table
-	picture?: string,
+	encodedPicture?: string, // File
 	description?: string,
+}
+
+export type ProfileUpdateRequest = {
+	login: LoginData,
+	newUsername?: string,
+	newPassword?: string,
+	newPicture?: string,
+	newDescription?: string,
 }
 
 export default class Profiles {
@@ -36,20 +44,20 @@ export default class Profiles {
 		return true;
 	}
 
-	public async setPicture(username: string, picture: string): Promise<void> {
-		const auth = new Authenticator();
-		const id: string = await auth.getUserId(username);
-		const updated = await this.update(
-			{ userid: id },
-			{ userid: id, picture: picture });
-		if (!updated)
-			console.error("couldn't update profile.");
-	}
-
-	public async getPicture(username: string): Promise<string | undefined> {
-		const profile: IProfile = await this.getProfile(username);
-		return profile.picture;
-	}
+	// public async setPicture(username: string, picture: string): Promise<void> {
+	// 	const auth = new Authenticator();
+	// 	const id: string = await auth.getUserId(username);
+	// 	const updated = await this.update(
+	// 		{ userid: id },
+	// 		{ userid: id, picture: picture });
+	// 	if (!updated)
+	// 		console.error("couldn't update profile.");
+	// }
+	//
+	// public async getPicture(username: string): Promise<File | undefined> {
+	// 	const profile: IProfile = await this.getProfile(username);
+	// 	return profile.picture;
+	// }
 	
 	public async getProfile(username: string): Promise<IProfile> {
 		const auth = new Authenticator();
@@ -58,6 +66,7 @@ export default class Profiles {
 			await this.createProfile(username);
 		}
 		const profile: IProfile = await this.find({ userid: id });
+		console.log("profile: " + profile.username);
 		return profile;
 	}
 
@@ -69,6 +78,19 @@ export default class Profiles {
 			{ userid: id, description: desc });
 		if (!updated)
 			console.error("couldn't update profile.");
+	}
+
+	public async updateProfile(request: ProfileUpdateRequest): Promise<boolean> {
+		const auth = new Authenticator();
+		const username = request.newUsername === undefined ?
+			request.login.username : request.newUsername; // ALREADY CHANGED USERNAME
+		const id: string = await auth.getUserId(username); 
+		return await this.update( { userid: id }, {
+			userid: id,
+			description: request.newDescription,
+			encodedPicture: request.newPicture,
+			username: username,
+		});
 	}
 
 	public async deleteUser(username: string) {

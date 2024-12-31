@@ -153,6 +153,38 @@ class Authenticator {
             });
         });
     }
+    validate(username, password) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let response = {
+                validData: true,
+                usernameExists: true,
+                success: true,
+            };
+            response.validData = this.usernameValid(username) && this.passwordValid(password);
+            response.usernameExists = response.validData ? yield this.usernameExists(username) : false;
+            response.success = response.validData && !response.usernameExists;
+            return response;
+        });
+    }
+    updateUser(oldLogin, newLogin) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const success = yield this.validate(newLogin.username, newLogin.password);
+            if (success.validData && success.usernameExists && oldLogin.username === newLogin.username) {
+                // user didn't change username but it will trigger the "username already exists"
+                success.usernameExists = false;
+                success.success = true;
+            }
+            const id = this.getUserId(oldLogin.username);
+            if (success.success) {
+                const updated = yield this.update({ username: oldLogin.username }, { username: newLogin.username, password: newLogin.password });
+                if (!updated) {
+                    success.success = false;
+                    console.error("couldn't update auth.");
+                }
+            }
+            return success;
+        });
+    }
     deleteUser(username) {
         return __awaiter(this, void 0, void 0, function* () {
             yield this.delete({ username: username });
@@ -166,6 +198,19 @@ class Authenticator {
                         inReject(inError);
                     else
                         inResolve(n);
+                });
+            });
+        });
+    }
+    update(obj, updatedObj) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const options = { upsert: true };
+            return new Promise((inResolve, inReject) => {
+                this.db.update(obj, updatedObj, options, (inError, numUpdated, upsert) => {
+                    if (inError)
+                        inReject(inError);
+                    else
+                        inResolve(numUpdated > 0);
                 });
             });
         });

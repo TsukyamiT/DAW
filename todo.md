@@ -1,20 +1,9 @@
 # Add profile
 ## client-side
-- add routing for profiles
-- add page
-- profile button takes user to their profile
-- make profile photo component
-- make profile description component
-- profile desciption component shows empty message
-- own profile should button for edit
-- fetch profile
 - game selection component
 - game stats screen
 - show best game
 ## server-side
-- add endpoint
-- query db for profile
-- fetch profile
 - query db for user ratings
 - fetch ratings
 
@@ -49,3 +38,14 @@
 
 # DONE
 - home page buttons break in small monitors
+- add routing for profiles
+- add page
+- profile button takes user to their profile
+- make profile photo component
+- make profile description component
+- profile desciption component shows empty message
+- own profile should button for edit
+- fetch profile
+- add endpoint
+- query db for profile
+- fetch profile

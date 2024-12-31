@@ -20,6 +20,7 @@ import Stats from "./endpoints/Stats";
 import Find from "./endpoints/Find";
 import Profile from "./endpoints/Profile";
 import UnknownPage from "./endpoints/UnknownPage";
+import EditProfile from "./endpoints/EditProfile";
 
 const SetupNavigator = () => {
 	State.setNavigator(useNavigate());
@@ -41,6 +42,7 @@ ReactDOM.render(
 			<Route path="/stats" element={<Stats />} />
 			<Route path="/find" element={<Find />} />
 			<Route path="/profile/:username" element={<Profile />} />
+			<Route path="/edit" element={<EditProfile />} />
 			<Route path="/*" element={<UnknownPage />} />
 		</Routes>
 	</BrowserRouter>,

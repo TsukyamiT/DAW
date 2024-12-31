@@ -89,7 +89,7 @@ type layout = {
 	onChange? : ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>,
 }
 
-export default function LightTextInput(layout: layout) {
+export default function LightMultilineTextInput(layout: layout) {
 	const outerTheme = useTheme();
 	return (
 		<div>
@@ -99,6 +99,7 @@ export default function LightTextInput(layout: layout) {
 					label={layout.label}
 					type={layout.type}
 					defaultValue={layout.defaultValue}
+					multiline
 					onChange={layout.onChange}
 					variant="outlined" />
 			</ThemeProvider>

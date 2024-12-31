@@ -19,7 +19,7 @@ const profiles_1 = __importDefault(require("./profiles"));
 const matches_1 = __importDefault(require("./matches"));
 const ratings_1 = __importDefault(require("./ratings"));
 const app = (0, express_1.default)();
-app.use(express_1.default.json());
+app.use(express_1.default.json({ limit: '50mb' }));
 app.use(express_1.default.static(path_1.default.join(__dirname, "../../client/dist")));
 // cors
 app.use(function (inRequest, inResponse, inNext) {
@@ -64,6 +64,45 @@ app.post('/api/add-match', (req, res) => __awaiter(void 0, void 0, void 0, funct
             ratings.setRating(match.username, match.game, match.rating);
         }
         res.json(matchAddStatus);
+    }
+    catch (error) {
+        console.error("error on adding match: " + error);
+    }
+}));
+app.post('/api/update-profile', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const auth = new auth_1.default();
+        const profileUpdateRequest = req.body;
+        const authSuccess = yield auth.login(profileUpdateRequest.login);
+        if (!authSuccess.success) {
+            res.json(authSuccess);
+        }
+        else {
+            const newUsername = profileUpdateRequest.newUsername === undefined ?
+                profileUpdateRequest.login.username : profileUpdateRequest.newUsername;
+            const newPassword = profileUpdateRequest.newPassword === undefined ?
+                profileUpdateRequest.login.password : profileUpdateRequest.newPassword;
+            const newLogin = {
+                username: newUsername,
+                password: newPassword,
+            };
+            const updateAuthSuccess = yield auth.updateUser(profileUpdateRequest.login, newLogin);
+            if (!updateAuthSuccess.success) {
+                res.json(updateAuthSuccess);
+            }
+            else {
+                const profiles = new profiles_1.default();
+                const ratings = new ratings_1.default();
+                yield ratings.updateUsername(profileUpdateRequest.login.username, newUsername);
+                const profileUpdateSuccess = yield profiles.updateProfile(profileUpdateRequest);
+                const success = {
+                    success: profileUpdateSuccess,
+                    usernameExists: false,
+                    validData: true,
+                };
+                res.json(success);
+            }
+        }
     }
     catch (error) {
         console.error("error on adding match: " + error);

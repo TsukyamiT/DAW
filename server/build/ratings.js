@@ -75,7 +75,23 @@ class PlayerRatings {
             const id = yield auth.getUserId(username);
             const updated = yield this.update({ userid: id, game: game }, { userid: id, rating: rating, game: game, username: username });
             if (!updated)
-                console.error("couldn't update profile.");
+                console.error("couldn't update rating.");
+        });
+    }
+    updateUsername(oldUsername, newUsername) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const userRating = (yield this.find({ username: oldUsername }))[0];
+            if (userRating === undefined || userRating === null)
+                return;
+            const newUserRating = {
+                userid: userRating.userid,
+                game: userRating.game,
+                rating: userRating.rating,
+                username: newUsername,
+            };
+            const updated = yield this.update(userRating, newUserRating);
+            if (!updated)
+                console.error("couldn't update username in ratings.");
         });
     }
     deleteUser(username) {

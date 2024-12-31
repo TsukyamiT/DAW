@@ -10,6 +10,7 @@ import { useParams, Params } from "react-router-dom";
 import Button from "@mui/material/Button";
 import BaseLayout from "../components/BaseLayout";
 import UnknownPage from "./UnknownPage";
+import LightUnknownPage from "../components/LightUnknownPage";
 
 const routerParam = () => {
 	const { username } = useParams();
@@ -20,6 +21,7 @@ const routerParam = () => {
 			State.setLoading(true);
 			try {
 				profile = await Profiles.getProfile(username);
+				console.log("got profile");
 			} catch (error) {
 				console.error("could not get profiles.");
 				profile = undefined;
@@ -49,7 +51,7 @@ const Description = () => {
 		);
 	}
 	return (
-		<Typography variant="h5" className="about-text" align="left">
+		<Typography variant="h5" className="about-text" align="left" padding="0px">
 			{State.getViewProfile().description}
 		</Typography>
 	);
@@ -98,13 +100,18 @@ const EditButton = () => {
 }
 
 const ProfilePicture = () => {
-	if (State.getViewProfile().picture === undefined) {
+	if (State.getViewProfile().encodedPicture === undefined ||
+		State.getViewProfile().encodedPicture === null) {
 		return (
 			<img src={State.getDefaultProfilePicture()} alt="profilePicture" className="profile-picture" />
 		);
 	}
 	return (
-		<img src={State.getViewProfile().picture} alt="profilePicture" className="profile-picture" />
+		<img src={
+			URL.createObjectURL(
+			Profiles.decodeFile(
+			State.getViewProfile().encodedPicture))
+		} alt="profilePicture" className="profile-picture" />
 	);
 }
 
@@ -116,10 +123,10 @@ class Profile extends Component<ProfileProps> {
 
 	render() {
 		const { username } = this.props;
-		if (State.getViewProfile() === undefined || State.getViewProfile === null)
-			return(
-				<UnknownPage />
-			);
+		if (State.getViewProfile() === undefined || State.getViewProfile() === null) {
+			return(<LightUnknownPage />);
+		}
+
 		return (
 			<div className="profile">
 				<BaseLayout />

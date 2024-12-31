@@ -41,7 +41,22 @@ export default class PlayerRatings {
 			{ userid: id, game: game },
 			{ userid: id, rating: rating, game: game, username: username });
 		if (!updated)
-			console.error("couldn't update profile.");
+			console.error("couldn't update rating.");
+	}
+
+	public async updateUsername(oldUsername: string, newUsername: string) {
+		const userRating = (await this.find({ username: oldUsername }))[0];
+		if (userRating === undefined || userRating === null)
+			return;
+		const newUserRating = {
+			userid: userRating.userid,
+			game: userRating.game,
+			rating: userRating.rating,
+			username: newUsername,
+		}
+		const updated = await this.update( userRating, newUserRating);
+		if (!updated)
+			console.error("couldn't update username in ratings.");
 	}
 
 	public async deleteUser(username: string) {
